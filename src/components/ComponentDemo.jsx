@@ -30,7 +30,7 @@ export function ComponentDemo({ item, onPrev, onNext, hasPrev, hasNext }) {
   }
 
   async function handleCopyInstall() {
-    await navigator.clipboard.writeText(item.installation || `bunx forma-ui add ${item.slug}`);
+    await navigator.clipboard.writeText(item.installation || `npx funui add ${item.slug}`);
     setCopiedInstall(true);
     setTimeout(() => setCopiedInstall(false), 2000);
   }
@@ -54,7 +54,13 @@ export function ComponentDemo({ item, onPrev, onNext, hasPrev, hasNext }) {
           </h1>
           {item.badge && (
             <Badge
-              variant={item.badge === "new" ? "lime" : item.badge === "updated" ? "updated" : "accent"}
+              variant={
+                item.badge === "new" || item.badge === "fun"
+                  ? "lime"
+                  : item.badge === "updated"
+                  ? "updated"
+                  : "default"
+              }
             >
               {item.badge}
             </Badge>

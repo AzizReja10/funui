@@ -1,11 +1,13 @@
-export function BloomLogo({ className = "h-8 w-8" }) {
+export function BloomLogo({ className = "w-[30px] h-[30px]" }) {
   return (
-    <div className={`relative flex items-center justify-center shrink-0 ${className}`}>
+    <div className={`relative shrink-0 flex items-center justify-center ${className}`}>
       <svg
+        width="30"
+        height="30"
         viewBox="0 0 36 36"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        className="w-full h-full"
+        className="w-[30px] h-[30px] block"
       >
         {/* Scalloped outer rosette outline */}
         <path
@@ -30,23 +32,23 @@ export function BloomLogo({ className = "h-8 w-8" }) {
              C 9.4,4.7 10.0,2.5 11.7,1.9
              C 13.4,1.3 15.0,2.8 16.8,2.7
              Z"
-          className="stroke-zinc-300 dark:stroke-zinc-700"
+          className="stroke-neutral-300 dark:stroke-neutral-600"
           strokeWidth="1.25"
           fill="none"
           strokeLinejoin="round"
         />
 
-        {/* Inner dark circular pill */}
-        <circle cx="18" cy="18" r="11" className="fill-[#141416] dark:fill-black" />
+        {/* Inner dark circular core */}
+        <circle cx="18" cy="18" r="10.5" className="fill-[#141416] dark:fill-black" />
 
         {/* Multi-color iridescent gradient star flower */}
         <defs>
-          <linearGradient id="bloomGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+          <linearGradient id="bloomG1" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="#FFA07A" />
             <stop offset="50%" stopColor="#FF69B4" />
             <stop offset="100%" stopColor="#9370DB" />
           </linearGradient>
-          <linearGradient id="bloomGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+          <linearGradient id="bloomG2" x1="100%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#87CEFA" />
             <stop offset="50%" stopColor="#FFB6C1" />
             <stop offset="100%" stopColor="#FFD700" />
@@ -55,16 +57,13 @@ export function BloomLogo({ className = "h-8 w-8" }) {
 
         {/* 6-spoke iridescent bloom asterisk */}
         <g strokeWidth="1.75" strokeLinecap="round" opacity="0.95">
-          {/* Vertical spoke */}
-          <line x1="18" y1="12" x2="18" y2="24" stroke="url(#bloomGrad1)" />
-          {/* 60 deg spoke */}
-          <line x1="12.8" y1="15" x2="23.2" y2="21" stroke="url(#bloomGrad2)" />
-          {/* 120 deg spoke */}
-          <line x1="12.8" y1="21" x2="23.2" y2="15" stroke="url(#bloomGrad1)" />
+          <line x1="18" y1="12.5" x2="18" y2="23.5" stroke="url(#bloomG1)" />
+          <line x1="13.2" y1="15.2" x2="22.8" y2="20.8" stroke="url(#bloomG2)" />
+          <line x1="13.2" y1="20.8" x2="22.8" y2="15.2" stroke="url(#bloomG1)" />
         </g>
 
-        {/* Central glowing core dot */}
-        <circle cx="18" cy="18" r="1.5" fill="#FFE4B5" />
+        {/* Center tiny glowing seed dot */}
+        <circle cx="18" cy="18" r="1.25" fill="#FFE4B5" />
       </svg>
     </div>
   );

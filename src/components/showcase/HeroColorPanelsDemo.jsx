@@ -5,7 +5,6 @@ import { Badge } from "../ui/Badge";
 
 export function HeroColorPanelsDemo() {
   const [fanned, setFanned] = useState(false);
-  const [activeTab, setActiveTab] = useState("agents");
   const [copied, setCopied] = useState(false);
 
   const panels = [
@@ -44,15 +43,15 @@ export function HeroColorPanelsDemo() {
   ];
 
   function handleCopy() {
-    navigator.clipboard.writeText("npx forma-ui add hero-color-panels");
+    navigator.clipboard.writeText("npx native-bloom add hero-color-panels");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
 
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl border border-border bg-gradient-to-b from-surface via-bg to-surface p-6 sm:p-10 transition-all duration-300">
+    <div className="relative w-full overflow-hidden rounded-2xl border border-border bg-gradient-to-b from-surface via-bg to-surface p-4 sm:p-8 lg:p-10 transition-all duration-300">
       {/* Decorative top label */}
-      <div className="flex items-center justify-between mb-8 pb-4 border-b border-border/60">
+      <div className="flex items-center justify-between mb-6 pb-3 border-b border-border/60">
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-neon-lime animate-pulse" />
           <span className="text-xs font-mono font-medium text-muted tracking-wide uppercase">Default Layout</span>
@@ -63,14 +62,15 @@ export function HeroColorPanelsDemo() {
             className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono rounded-md border border-border bg-surface text-fg hover:bg-surface-hover transition-colors"
           >
             <Layers size={13} />
-            <span>{fanned ? "Collapse Panels" : "Expand 3D Depth"}</span>
+            <span className="hidden sm:inline">{fanned ? "Collapse Panels" : "Expand 3D Depth"}</span>
+            <span className="sm:hidden">{fanned ? "Collapse" : "Expand"}</span>
           </button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
         {/* Left Column: Headline and CTAs */}
-        <div className="lg:col-span-7 flex flex-col gap-5 z-10">
+        <div className="lg:col-span-7 flex flex-col gap-4 sm:gap-5 z-10">
           <div className="flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold tracking-wide uppercase bg-neon-lime text-black shadow-xs">
               <Sparkles size={12} className="animate-spin text-black" style={{ animationDuration: "6s" }} />
@@ -79,7 +79,7 @@ export function HeroColorPanelsDemo() {
             <span className="text-xs text-muted font-mono">v2.4.0 • Copy & Paste</span>
           </div>
 
-          <h2 className="font-heading text-3xl sm:text-5xl font-extrabold tracking-tight text-fg leading-[1.08]">
+          <h2 className="font-heading text-2xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-fg leading-[1.12]">
             AI SDK Agents <br />
             <span className="bg-gradient-to-r from-fg via-fg/90 to-fg/60 bg-clip-text text-transparent">
               Copy and Paste
@@ -96,7 +96,7 @@ export function HeroColorPanelsDemo() {
             <Button
               variant="default"
               size="lg"
-              className="gap-2 group shadow-lg hover:shadow-xl"
+              className="gap-2 group shadow-lg hover:shadow-xl text-xs sm:text-sm"
             >
               <span>Browse Agents</span>
               <ArrowRight size={15} className="transition-transform group-hover:translate-x-1" />
@@ -104,16 +104,16 @@ export function HeroColorPanelsDemo() {
 
             <button
               onClick={handleCopy}
-              className="inline-flex items-center gap-2 h-11 px-4 text-xs font-mono rounded-lg border border-border bg-surface text-fg hover:bg-surface-hover hover:border-fg/30 transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 h-10 sm:h-11 px-3.5 sm:px-4 text-xs font-mono rounded-lg border border-border bg-surface text-fg hover:bg-surface-hover hover:border-fg/30 transition-all cursor-pointer"
             >
               <Terminal size={14} className="text-muted" />
-              <span>bunx forma add hero</span>
+              <span>npx bloom add hero</span>
               {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} className="text-muted" />}
             </button>
           </div>
 
           {/* Tech Stack Badges */}
-          <div className="pt-4 flex flex-wrap items-center gap-2 border-t border-border/50 text-xs text-muted">
+          <div className="pt-3 sm:pt-4 flex flex-wrap items-center gap-2 border-t border-border/50 text-xs text-muted">
             <span className="font-mono text-[11px] uppercase tracking-wider text-muted">Built for:</span>
             <span className="px-2 py-0.5 rounded-md bg-surface border border-border text-[11px] font-medium text-fg">Next.js 15</span>
             <span className="px-2 py-0.5 rounded-md bg-surface border border-border text-[11px] font-medium text-fg">Vercel AI</span>
@@ -123,9 +123,9 @@ export function HeroColorPanelsDemo() {
         </div>
 
         {/* Right Column: 3D Layered Color Panels Shader Graphic */}
-        <div className="lg:col-span-5 flex items-center justify-center py-6">
+        <div className="lg:col-span-5 flex items-center justify-center py-4 sm:py-6 overflow-hidden">
           <div
-            className="relative w-full max-w-[340px] h-[300px] flex items-center justify-center cursor-pointer select-none perspective-[1000px]"
+            className="relative w-full max-w-[340px] h-[260px] sm:h-[300px] flex items-center justify-center cursor-pointer select-none perspective-[1000px]"
             onClick={() => setFanned(!fanned)}
             onMouseEnter={() => setFanned(true)}
             onMouseLeave={() => setFanned(false)}
@@ -135,20 +135,20 @@ export function HeroColorPanelsDemo() {
 
             {/* Layered Color Panels deck */}
             <div
-              className="relative w-64 h-48 transition-all duration-700 ease-out"
+              className="relative w-56 sm:w-64 h-40 sm:h-48 scale-[0.88] sm:scale-100 transition-all duration-700 ease-out origin-center"
               style={{
                 transform: fanned
-                  ? "rotateX(20deg) rotateY(-35deg) rotateZ(8deg) scale(1.05)"
+                  ? "rotateX(20deg) rotateY(-35deg) rotateZ(8deg) scale(1.04)"
                   : "rotateX(15deg) rotateY(-25deg) rotateZ(5deg)",
                 transformStyle: "preserve-3d",
               }}
             >
               {panels.map((panel, idx) => {
-                const step = idx * (fanned ? 36 : 14);
+                const step = idx * (fanned ? 32 : 13);
                 return (
                   <div
                     key={idx}
-                    className={`absolute inset-0 rounded-2xl border ${panel.border} bg-gradient-to-tr ${panel.gradient} backdrop-blur-md transition-all duration-700 ease-out flex flex-col justify-between p-4 ${panel.glow}`}
+                    className={`absolute inset-0 rounded-2xl border ${panel.border} bg-gradient-to-tr ${panel.gradient} backdrop-blur-md transition-all duration-700 ease-out flex flex-col justify-between p-3.5 sm:p-4 ${panel.glow}`}
                     style={{
                       transform: `translate3d(${step}px, ${-step * 0.75}px, ${step * 2}px)`,
                       zIndex: panel.z,
@@ -168,8 +168,8 @@ export function HeroColorPanelsDemo() {
 
                     {/* Subtle panel inner lines */}
                     <div className="space-y-1.5 my-auto opacity-75">
-                      <div className="h-1 w-24 bg-white/40 rounded-full" />
-                      <div className="h-1 w-16 bg-white/30 rounded-full" />
+                      <div className="h-1 w-20 sm:w-24 bg-white/40 rounded-full" />
+                      <div className="h-1 w-12 sm:w-16 bg-white/30 rounded-full" />
                     </div>
 
                     {/* Panel footer badge */}
@@ -185,20 +185,20 @@ export function HeroColorPanelsDemo() {
 
               {/* Floating micro card in front of panels */}
               <div
-                className="absolute -bottom-6 -left-6 rounded-xl border border-white/40 bg-bg/90 backdrop-blur-xl p-3 shadow-xl transition-all duration-700 ease-out z-[90]"
+                className="absolute -bottom-5 sm:-bottom-6 -left-4 sm:-left-6 rounded-xl border border-white/40 bg-bg/90 backdrop-blur-xl p-2.5 sm:p-3 shadow-xl transition-all duration-700 ease-out z-[90]"
                 style={{
                   transform: fanned
-                    ? "translate3d(-20px, 20px, 120px)"
-                    : "translate3d(0px, 0px, 60px)",
+                    ? "translate3d(-15px, 15px, 100px)"
+                    : "translate3d(0px, 0px, 50px)",
                 }}
               >
                 <div className="flex items-center gap-2">
-                  <div className="h-7 w-7 rounded-lg bg-neon-lime/20 flex items-center justify-center text-[#6d8a00] dark:text-neon-lime">
-                    <Code2 size={16} />
+                  <div className="h-6 w-6 sm:h-7 sm:w-7 rounded-lg bg-neon-lime/20 flex items-center justify-center text-[#6d8a00] dark:text-neon-lime">
+                    <Code2 size={15} />
                   </div>
                   <div>
-                    <div className="text-xs font-semibold text-fg">100+ Agent Patterns</div>
-                    <div className="text-[10px] text-muted">Zero lock-in runtime</div>
+                    <div className="text-[11px] sm:text-xs font-semibold text-fg">100+ Agent Patterns</div>
+                    <div className="text-[9px] sm:text-[10px] text-muted">Zero lock-in runtime</div>
                   </div>
                 </div>
               </div>

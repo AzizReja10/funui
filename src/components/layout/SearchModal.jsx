@@ -33,13 +33,19 @@ export function SearchModal({ isOpen, onClose, items, onSelect }) {
     }
   }, [isOpen]);
 
-  const filtered = items.filter((item) => {
+  const allItems = [
+    { slug: "home", name: "Home", category: "Getting Started", description: "FunUI overview, philosophy, and interactive primitives.", tags: ["home", "overview", "intro"] },
+    { slug: "installation", name: "Installation Guide", category: "Getting Started", description: "Vite, Next.js, and manual Tailwind setup walkthrough.", tags: ["install", "guide", "setup", "tailwind", "vite", "next"] },
+    ...items,
+  ];
+
+  const filtered = allItems.filter((item) => {
     if (!query.trim()) return true;
     const q = query.toLowerCase();
     return (
       item.name.toLowerCase().includes(q) ||
-      item.description.toLowerCase().includes(q) ||
-      item.category.toLowerCase().includes(q) ||
+      item.description?.toLowerCase().includes(q) ||
+      item.category?.toLowerCase().includes(q) ||
       item.tags?.some((t) => t.toLowerCase().includes(q))
     );
   });

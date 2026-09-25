@@ -96,3 +96,81 @@ body {
     transition-duration: 0.001ms !important;
   }
 }
+
+/* -------------------------------------------------------------------------- */
+/* Jelly Button Animations & Tactile Gelatin Styling                          */
+/* -------------------------------------------------------------------------- */
+@keyframes jello-horizontal {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+  40% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+  50% {
+    transform: scale3d(1.15, 0.85, 1);
+  }
+  65% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+  75% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.animate-jello {
+  animation: jello-horizontal 0.9s both;
+}
+
+.btn-jelly {
+  position: relative;
+  background-color: rgb(151, 95, 255);
+  color: white;
+  border-radius: 45px;
+  border: none;
+  box-shadow:
+    0px 10px 10px rgb(210, 187, 253) inset,
+    0px 5px 10px rgba(5, 5, 5, 0.212),
+    0px -10px 10px rgb(124, 54, 255) inset;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+}
+
+.btn-jelly::before {
+  content: "";
+  position: absolute;
+  top: 7px;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  background-color: rgba(250, 250, 250, 0.678);
+  filter: blur(1px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.btn-jelly::after {
+  content: "";
+  position: absolute;
+  bottom: 7px;
+  left: 15%;
+  width: 70%;
+  height: 2px;
+  background-color: rgba(250, 250, 250, 0.137);
+  filter: blur(1px);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.btn-jelly:hover {
+  animation: jello-horizontal 0.9s both;
+}

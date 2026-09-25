@@ -7,6 +7,7 @@ const variants = {
   accent: "bg-neon-lime text-black font-semibold hover:brightness-95 shadow-glow-lime/40 shadow-sm active:scale-[0.98]",
   primary: "bg-neon-blue text-white font-medium hover:bg-blue-600 shadow-glow-blue/30 shadow-sm active:scale-[0.98]",
   destructive: "bg-rose-600 text-white hover:bg-rose-700 active:scale-[0.98]",
+  jelly: "btn-jelly text-white font-semibold shadow-md",
 };
 
 const sizes = {
@@ -32,3 +33,5 @@ export function Button({ variant = "default", size = "md", className, children, 
     </button>
   );
 }
+
+export { BiteButton } from "./BiteButton";
