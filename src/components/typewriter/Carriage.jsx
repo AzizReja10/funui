@@ -22,7 +22,7 @@ const Carriage = forwardRef(function Carriage(
     if (typeof document === "undefined") return;
     const span = document.createElement("span");
     span.style.fontFamily = "'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
-    span.style.fontSize = "14.5px";
+    span.style.fontSize = "17px";
     span.style.letterSpacing = "-0.01em";
     span.style.visibility = "hidden";
     span.style.position = "absolute";
@@ -85,7 +85,7 @@ const Carriage = forwardRef(function Carriage(
   return (
     <div
       ref={carriageContainerRef}
-      className="relative h-52 overflow-hidden rounded-t-lg border-x border-t border-black/50 bg-[#0c0c0a] px-3 pt-3 select-none"
+      className="relative h-56 overflow-hidden rounded-t-lg border-x border-t border-black/50 bg-[#0c0c0a] px-3 pt-3 select-none"
     >
       {/* Platen roller cylinder behind the paper */}
       <div className="pointer-events-none absolute left-0 right-0 top-1/2 h-28 -translate-y-1/2 border-y border-white/[0.04] bg-gradient-to-b from-[#0a0a09] via-[#1a1917] to-[#0a0a09] opacity-95" />
@@ -113,7 +113,7 @@ const Carriage = forwardRef(function Carriage(
           {displayLines.map((item, i) => (
             <div
               key={i}
-              className="flex items-center h-[26px] pl-1 pr-4 text-[14.5px] leading-[26px] text-[#1c1917] overflow-hidden"
+              className="flex items-center h-[28px] pl-1 pr-4 text-[17px] leading-[28px] text-[#1c1917] overflow-hidden"
             >
               <span
                 className="whitespace-pre font-normal tracking-[-0.01em]"
@@ -122,12 +122,12 @@ const Carriage = forwardRef(function Carriage(
                 {item.text || "\u00A0"}
               </span>
               {item.isCurrent && (
-                <span ref={caretRef} className="tw-cursor text-[#1c1917] text-[14.5px] ml-[0.5px]">
+                <span ref={caretRef} className="tw-cursor text-[#1c1917] text-[17px] ml-[0.5px]">
                   ▍
                 </span>
               )}
               {item.isFullCursor && (
-                <span className="tw-cursor text-[#8a2525] text-[14.5px] ml-[0.5px]">▍</span>
+                <span className="tw-cursor text-[#8a2525] text-[17px] ml-[0.5px]">▍</span>
               )}
             </div>
           ))}
