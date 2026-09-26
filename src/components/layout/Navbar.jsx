@@ -1,5 +1,4 @@
 import { Contrast, Menu } from "lucide-react";
-import { BloomLogo } from "./BloomLogo";
 import { SearchInput } from "../ui/SearchInput";
 
 export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, onOpenSearch, activeSlug = "home" }) {
@@ -26,16 +25,15 @@ export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, on
   return (
     <div className="sticky top-4 z-50 w-full flex justify-center px-4 pointer-events-none">
       <header className="pointer-events-auto inline-flex items-center gap-4 sm:gap-6 h-[52px] rounded-full border border-neutral-200/90 dark:border-neutral-800 bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md shadow-[0_2px_14px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] px-3.5 sm:px-5 transition-all">
-        {/* Left: Scalloped Rosette Flower Logo + FunUI Brand */}
+        {/* Left: FunUI Brand */}
         <a
           href="/"
           onClick={(e) => {
             e.preventDefault();
             onNavigate?.("home");
           }}
-          className="flex items-center gap-2.5 group select-none cursor-pointer shrink-0 border-none bg-transparent"
+          className="flex items-center group select-none cursor-pointer shrink-0 border-none bg-transparent"
         >
-          <BloomLogo className="w-[30px] h-[30px]" />
           <span className="font-heading text-[16px] sm:text-[17px] font-bold tracking-tight text-neutral-900 dark:text-white whitespace-nowrap">
             FunUI
           </span>

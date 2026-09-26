@@ -5,7 +5,6 @@ import { SearchModal } from "./components/layout/SearchModal";
 import { ComponentDemo } from "./components/ComponentDemo";
 import { HomePage } from "./components/pages/HomePage";
 import { InstallationGuide } from "./components/pages/InstallationGuide";
-import { BloomLogo } from "./components/layout/BloomLogo";
 import { registry } from "./data/registry";
 import { getSlugFromLocation, getUrlForSlug, getTitleForSlug } from "./lib/routes";
 import { X } from "lucide-react";
@@ -232,8 +231,7 @@ export default function App() {
           {/* Drawer Panel */}
           <div className="relative w-72 max-w-[85vw] bg-bg border-r border-border h-full flex flex-col shadow-2xl z-10 animate-in slide-in-from-left duration-200">
             <div className="flex items-center justify-between p-4 border-b border-border">
-              <div className="flex items-center gap-2">
-                <BloomLogo className="w-[26px] h-[26px]" />
+              <div className="flex items-center">
                 <span className="font-heading text-base font-bold text-fg">FunUI</span>
               </div>
               <button
