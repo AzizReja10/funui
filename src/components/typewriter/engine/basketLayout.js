@@ -8,6 +8,25 @@ export const BASKET = Object.fromEntries(
   })
 );
 
-export const MAX_CHARS = 42;
-export const STEP_PX = 8.6;
-export const MARGIN_WARN_AT = MAX_CHARS - 6;
+export const MAX_CHARS = 58;
+export const STEP_PX = 6.2;
+export const MARGIN_WARN_AT = 50;
+
+export const MAX_LINE_WIDTH_PX = 348;
+export const MARGIN_WARN_WIDTH_PX = 300;
+
+let measureCtx = null;
+export function getTextPixelWidth(text, font = "14.5px 'Roboto', sans-serif") {
+  if (typeof document === "undefined") {
+    return (text || "").length * 8.0;
+  }
+  if (!measureCtx) {
+    const canvas = document.createElement("canvas");
+    measureCtx = canvas.getContext("2d");
+  }
+  if (!measureCtx) {
+    return (text || "").length * 8.0;
+  }
+  measureCtx.font = font;
+  return measureCtx.measureText(text || "").width;
+}

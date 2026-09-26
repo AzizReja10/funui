@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import { Badge } from "./ui/Badge";
 
-export function ComponentDemo({ item, onPrev, onNext, hasPrev, hasNext }) {
+export function ComponentDemo({ item, onPrev, onNext, hasPrev, hasNext, onNavigate }) {
   const [tab, setTab] = useState("preview"); // 'preview' | 'code' | 'props'
   const [viewport, setViewport] = useState("desktop"); // 'desktop' | 'tablet' | 'mobile'
   const [copiedPage, setCopiedPage] = useState(false);
@@ -39,9 +39,31 @@ export function ComponentDemo({ item, onPrev, onNext, hasPrev, hasNext }) {
     <article id={item.slug} className="scroll-mt-20">
       {/* Category Breadcrumb */}
       <div className="flex items-center gap-2 text-xs font-mono text-muted mb-2">
-        <span>Docs</span>
+        <a
+          href="/installation"
+          onClick={(e) => {
+            if (onNavigate) {
+              e.preventDefault();
+              onNavigate("installation");
+            }
+          }}
+          className="hover:text-fg transition-colors"
+        >
+          Docs
+        </a>
         <span>/</span>
-        <span>Components</span>
+        <a
+          href="/components/button"
+          onClick={(e) => {
+            if (onNavigate) {
+              e.preventDefault();
+              onNavigate("button");
+            }
+          }}
+          className="hover:text-fg transition-colors"
+        >
+          Components
+        </a>
         <span>/</span>
         <span className="text-fg font-medium">{item.category}</span>
       </div>

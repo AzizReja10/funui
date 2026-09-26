@@ -7,10 +7,11 @@ import { HomePage } from "./components/pages/HomePage";
 import { InstallationGuide } from "./components/pages/InstallationGuide";
 import { BloomLogo } from "./components/layout/BloomLogo";
 import { registry } from "./data/registry";
-import { X, ArrowRight } from "lucide-react";
+import { getSlugFromLocation, getUrlForSlug, getTitleForSlug } from "./lib/routes";
+import { X } from "lucide-react";
 
 export default function App() {
-  const [activeSlug, setActiveSlug] = useState("home");
+  const [activeSlug, setActiveSlug] = useState(() => getSlugFromLocation(registry));
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== "undefined") {
       return (
@@ -23,6 +24,30 @@ export default function App() {
   });
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Sync browser title and normalize canonical URL path
+  useEffect(() => {
+    const canonicalPath = getUrlForSlug(activeSlug);
+    if (typeof window !== "undefined" && !window.location.hash && window.location.pathname !== canonicalPath) {
+      window.history.replaceState({ slug: activeSlug }, "", canonicalPath);
+    }
+    document.title = getTitleForSlug(activeSlug, registry);
+  }, [activeSlug]);
+
+  // Handle browser Back / Forward and direct hash changes
+  useEffect(() => {
+    function handleLocationChange() {
+      const slug = getSlugFromLocation(registry);
+      setActiveSlug(slug);
+    }
+
+    window.addEventListener("popstate", handleLocationChange);
+    window.addEventListener("hashchange", handleLocationChange);
+    return () => {
+      window.removeEventListener("popstate", handleLocationChange);
+      window.removeEventListener("hashchange", handleLocationChange);
+    };
+  }, []);
 
   useEffect(() => {
     if (isDark) {
@@ -51,7 +76,11 @@ export default function App() {
   }
 
   function handleSelect(slug) {
-    setActiveSlug(slug);
+    if (slug !== activeSlug) {
+      const targetUrl = getUrlForSlug(slug);
+      window.history.pushState({ slug }, "", targetUrl);
+      setActiveSlug(slug);
+    }
     setIsMobileMenuOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -70,6 +99,7 @@ export default function App() {
         onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
         onNavigate={handleSelect}
         onOpenSearch={() => setIsSearchOpen(true)}
+        activeSlug={activeSlug}
       />
 
       {/* Main 2-Column Responsive Layout with generous top clearance for floating header */}
@@ -99,13 +129,18 @@ export default function App() {
                 hasNext={!!nextItem}
                 onPrev={() => prevItem && handleSelect(prevItem.slug)}
                 onNext={() => nextItem && handleSelect(nextItem.slug)}
+                onNavigate={handleSelect}
               />
 
               {/* Previous / Next Component Navigation Footer */}
               <div className="mt-14 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
                 {prevItem ? (
-                  <button
-                    onClick={() => handleSelect(prevItem.slug)}
+                  <a
+                    href={getUrlForSlug(prevItem.slug)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSelect(prevItem.slug);
+                    }}
                     className="w-full sm:w-auto flex flex-col items-start p-4 rounded-xl border border-border bg-surface hover:bg-surface-hover hover:border-fg/20 transition-all text-left cursor-pointer group"
                   >
                     <span className="text-[11px] font-mono text-muted uppercase tracking-wider">
@@ -114,10 +149,14 @@ export default function App() {
                     <span className="text-sm font-semibold text-fg mt-0.5 group-hover:text-neon-lime transition-colors">
                       {prevItem.name}
                     </span>
-                  </button>
+                  </a>
                 ) : (
-                  <button
-                    onClick={() => handleSelect("installation")}
+                  <a
+                    href="/installation"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSelect("installation");
+                    }}
                     className="w-full sm:w-auto flex flex-col items-start p-4 rounded-xl border border-border bg-surface hover:bg-surface-hover hover:border-fg/20 transition-all text-left cursor-pointer group"
                   >
                     <span className="text-[11px] font-mono text-muted uppercase tracking-wider">
@@ -126,12 +165,16 @@ export default function App() {
                     <span className="text-sm font-semibold text-fg mt-0.5 group-hover:text-neon-lime transition-colors">
                       Installation Guide
                     </span>
-                  </button>
+                  </a>
                 )}
 
                 {nextItem && (
-                  <button
-                    onClick={() => handleSelect(nextItem.slug)}
+                  <a
+                    href={getUrlForSlug(nextItem.slug)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleSelect(nextItem.slug);
+                    }}
                     className="w-full sm:w-auto flex flex-col items-end p-4 rounded-xl border border-border bg-surface hover:bg-surface-hover hover:border-fg/20 transition-all text-right cursor-pointer group ml-auto"
                   >
                     <span className="text-[11px] font-mono text-muted uppercase tracking-wider">
@@ -140,7 +183,7 @@ export default function App() {
                     <span className="text-sm font-semibold text-fg mt-0.5 group-hover:text-neon-lime transition-colors">
                       {nextItem.name}
                     </span>
-                  </button>
+                  </a>
                 )}
               </div>
             </>

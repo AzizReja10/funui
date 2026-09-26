@@ -2,14 +2,15 @@ import { useState, useMemo } from "react";
 import { Home, Terminal } from "lucide-react";
 import { cn } from "../../lib/cn";
 import { SearchInput } from "../ui/SearchInput";
+import { getUrlForSlug } from "../../lib/routes";
+
+const gettingStartedItems = [
+  { slug: "home", name: "Home", category: "Getting Started", icon: Home },
+  { slug: "installation", name: "Installation Guide", category: "Getting Started", icon: Terminal, badge: "guide" },
+];
 
 export function Sidebar({ items, activeSlug, onSelect, onCloseMobile, isDark, onToggleTheme }) {
   const [filterQuery, setFilterQuery] = useState("");
-
-  const gettingStartedItems = [
-    { slug: "home", name: "Home", category: "Getting Started", icon: Home },
-    { slug: "installation", name: "Installation Guide", category: "Getting Started", icon: Terminal, badge: "guide" },
-  ];
 
   const filteredItems = useMemo(() => {
     if (!filterQuery.trim()) return items;
@@ -70,9 +71,11 @@ export function Sidebar({ items, activeSlug, onSelect, onCloseMobile, isDark, on
                 const isActive = activeSlug === item.slug;
                 const Icon = item.icon;
                 return (
-                  <button
+                  <a
                     key={item.slug}
-                    onClick={() => {
+                    href={getUrlForSlug(item.slug)}
+                    onClick={(e) => {
+                      e.preventDefault();
                       onSelect(item.slug);
                       onCloseMobile?.();
                     }}
@@ -93,7 +96,7 @@ export function Sidebar({ items, activeSlug, onSelect, onCloseMobile, isDark, on
                         {item.badge}
                       </span>
                     )}
-                  </button>
+                  </a>
                 );
               })}
             </div>
@@ -111,9 +114,11 @@ export function Sidebar({ items, activeSlug, onSelect, onCloseMobile, isDark, on
               {catItems.map((item) => {
                 const isActive = activeSlug === item.slug;
                 return (
-                  <button
+                  <a
                     key={item.slug}
-                    onClick={() => {
+                    href={getUrlForSlug(item.slug)}
+                    onClick={(e) => {
+                      e.preventDefault();
                       onSelect(item.slug);
                       onCloseMobile?.();
                     }}
@@ -139,7 +144,7 @@ export function Sidebar({ items, activeSlug, onSelect, onCloseMobile, isDark, on
                         {item.badge}
                       </span>
                     )}
-                  </button>
+                  </a>
                 );
               })}
             </div>

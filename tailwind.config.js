@@ -29,6 +29,7 @@ export default {
         sans: ["Inter", "sans-serif"],
         serif: ["Newsreader", "Georgia", "serif"],
         mono: ["JetBrains Mono", "monospace"],
+        roboto: ["Roboto", "sans-serif"],
       },
       animation: {
         "pulse-subtle": "pulseSubtle 3s cubic-bezier(0.4, 0, 0.6, 1) infinite",

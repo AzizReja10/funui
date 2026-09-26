@@ -1,15 +1,25 @@
-import { useState } from "react";
 import { Contrast, Menu } from "lucide-react";
 import { BloomLogo } from "./BloomLogo";
 import { SearchInput } from "../ui/SearchInput";
 
-export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, onOpenSearch }) {
-  const [activeNav, setActiveNav] = useState("blocks");
+export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, onOpenSearch, activeSlug = "home" }) {
+  const activeNav = activeSlug === "home" ? "home" : activeSlug === "installation" ? "install" : "blocks";
 
   const navLinks = [
-    { id: "home", label: "Home", action: () => onNavigate?.("home") },
-    { id: "blocks", label: "Blocks", action: () => onNavigate?.("button") },
-    { id: "install", label: "Installation", action: () => onNavigate?.("installation") },
+    { id: "home", label: "Home", href: "/", action: () => onNavigate?.("home") },
+    {
+      id: "blocks",
+      label: "Blocks",
+      href: activeSlug && activeSlug !== "home" && activeSlug !== "installation" ? `/components/${activeSlug}` : "/components/button",
+      action: () => {
+        if (activeSlug && activeSlug !== "home" && activeSlug !== "installation") {
+          onNavigate?.(activeSlug);
+        } else {
+          onNavigate?.("button");
+        }
+      },
+    },
+    { id: "install", label: "Installation", href: "/installation", action: () => onNavigate?.("installation") },
     { id: "mcp", label: "MCP", badge: "WIP", action: () => alert("MCP skills and agent primitives coming soon!") },
   ];
 
@@ -17,9 +27,10 @@ export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, on
     <div className="sticky top-4 z-50 w-full flex justify-center px-4 pointer-events-none">
       <header className="pointer-events-auto inline-flex items-center gap-4 sm:gap-6 h-[52px] rounded-full border border-neutral-200/90 dark:border-neutral-800 bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md shadow-[0_2px_14px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] px-3.5 sm:px-5 transition-all">
         {/* Left: Scalloped Rosette Flower Logo + FunUI Brand */}
-        <button
-          onClick={() => {
-            setActiveNav("home");
+        <a
+          href="/"
+          onClick={(e) => {
+            e.preventDefault();
             onNavigate?.("home");
           }}
           className="flex items-center gap-2.5 group select-none cursor-pointer shrink-0 border-none bg-transparent"
@@ -28,16 +39,19 @@ export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, on
           <span className="font-heading text-[16px] sm:text-[17px] font-bold tracking-tight text-neutral-900 dark:text-white whitespace-nowrap">
             FunUI
           </span>
-        </button>
+        </a>
 
         {/* Center: Navigation Links */}
         <nav className="hidden md:flex items-center gap-5 sm:gap-6 text-sm font-medium">
           {navLinks.map((link) => (
-            <button
+            <a
               key={link.id}
-              onClick={() => {
-                setActiveNav(link.id);
-                link.action();
+              href={link.href || "#"}
+              onClick={(e) => {
+                if (link.action) {
+                  e.preventDefault();
+                  link.action();
+                }
               }}
               className="relative inline-flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer group whitespace-nowrap bg-transparent border-none"
             >
@@ -50,7 +64,7 @@ export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, on
                   {link.badge}
                 </span>
               )}
-            </button>
+            </a>
           ))}
         </nav>
 
