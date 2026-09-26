@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
-import { Search, Sparkles, Filter, ChevronRight, Hash, Home, Terminal, Layers } from "lucide-react";
+import { Home, Terminal } from "lucide-react";
 import { cn } from "../../lib/cn";
-import { Badge } from "../ui/Badge";
+import { SearchInput } from "../ui/SearchInput";
 
 export function Sidebar({ items, activeSlug, onSelect, onCloseMobile, isDark, onToggleTheme }) {
   const [filterQuery, setFilterQuery] = useState("");
@@ -48,24 +48,13 @@ export function Sidebar({ items, activeSlug, onSelect, onCloseMobile, isDark, on
     <aside className="w-64 xl:w-72 shrink-0 border-r border-border/80 py-4 pr-6 pl-1 flex flex-col h-[calc(100vh-6rem)] sticky top-20 overflow-y-auto">
       {/* Quick sidebar filter */}
       <div className="mb-5 px-1">
-        <div className="relative flex items-center">
-          <Search size={13} className="pointer-events-none absolute left-2.5 text-muted" />
-          <input
-            type="text"
-            placeholder="Filter components or docs..."
-            value={filterQuery}
-            onChange={(e) => setFilterQuery(e.target.value)}
-            className="h-8.5 w-full rounded-md border border-border bg-surface pl-8 pr-2.5 text-xs text-fg placeholder:text-muted focus:border-fg/40 focus:outline-none transition-colors"
-          />
-          {filterQuery && (
-            <button
-              onClick={() => setFilterQuery("")}
-              className="absolute right-2 text-xs text-muted hover:text-fg cursor-pointer"
-            >
-              ×
-            </button>
-          )}
-        </div>
+        <SearchInput
+          fullWidth
+          placeholder="Filter components or docs..."
+          value={filterQuery}
+          onChange={(e) => setFilterQuery(e.target.value)}
+          onClear={() => setFilterQuery("")}
+        />
       </div>
 
       {/* Categorized List */}

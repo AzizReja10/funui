@@ -69,6 +69,7 @@ export default function App() {
         onToggleTheme={toggleTheme}
         onOpenMobileMenu={() => setIsMobileMenuOpen(true)}
         onNavigate={handleSelect}
+        onOpenSearch={() => setIsSearchOpen(true)}
       />
 
       {/* Main 2-Column Responsive Layout with generous top clearance for floating header */}

@@ -1,9 +1,8 @@
 import { useState } from "react";
-import { ArrowRight, Sparkles, Terminal, Copy, Check, Shield, Zap, Layers, Code2, ArrowUpRight } from "lucide-react";
+import { ArrowRight, Sparkles, Terminal, Copy, Check, Shield, Zap, Layers, ArrowUpRight } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
 import { Switch } from "../ui/Switch";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../ui/Card";
 
 export function HomePage({ onNavigate }) {
   const [copiedCli, setCopiedCli] = useState(false);
@@ -184,7 +183,6 @@ export function HomePage({ onNavigate }) {
               <div className="h-6 w-16 rounded-lg bg-gradient-to-r from-cyan-400 to-blue-500" />
               <div className="h-6 w-16 rounded-lg bg-gradient-to-r from-pink-500 to-purple-600" />
             </div>
-            <p className="text-xs text-muted mt-2">Split-layout hero section with responsive ColorPanels shader visuals.</p>
           </div>
         </div>
       </section>

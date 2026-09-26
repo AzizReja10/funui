@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Contrast, Menu } from "lucide-react";
 import { BloomLogo } from "./BloomLogo";
+import { SearchInput } from "../ui/SearchInput";
 
-export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate }) {
+export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, onOpenSearch }) {
   const [activeNav, setActiveNav] = useState("blocks");
 
   const navLinks = [
@@ -14,7 +15,7 @@ export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate }) 
 
   return (
     <div className="sticky top-4 z-50 w-full flex justify-center px-4 pointer-events-none">
-      <header className="pointer-events-auto inline-flex items-center gap-5 sm:gap-8 h-[52px] rounded-full border border-neutral-200/90 dark:border-neutral-800 bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md shadow-[0_2px_14px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] px-3.5 sm:px-5 transition-all">
+      <header className="pointer-events-auto inline-flex items-center gap-4 sm:gap-6 h-[52px] rounded-full border border-neutral-200/90 dark:border-neutral-800 bg-white/95 dark:bg-[#121214]/95 backdrop-blur-md shadow-[0_2px_14px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_24px_rgba(0,0,0,0.4)] px-3.5 sm:px-5 transition-all">
         {/* Left: Scalloped Rosette Flower Logo + FunUI Brand */}
         <button
           onClick={() => {
@@ -30,7 +31,7 @@ export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate }) 
         </button>
 
         {/* Center: Navigation Links */}
-        <nav className="hidden md:flex items-center gap-6 sm:gap-7 text-sm font-medium">
+        <nav className="hidden md:flex items-center gap-5 sm:gap-6 text-sm font-medium">
           {navLinks.map((link) => (
             <button
               key={link.id}
@@ -52,6 +53,18 @@ export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate }) 
             </button>
           ))}
         </nav>
+
+        {/* Docs Search Button / Input */}
+        {onOpenSearch && (
+          <div className="hidden lg:block shrink-0">
+            <SearchInput
+              placeholder="Search docs..."
+              readOnly
+              onClick={onOpenSearch}
+              className="cursor-pointer"
+            />
+          </div>
+        )}
 
         {/* Right: Enclosed Mini Capsule Pill [Contrast | Sign in] */}
         <div className="flex items-center gap-2 shrink-0">

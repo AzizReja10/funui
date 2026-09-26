@@ -9,6 +9,7 @@ import { GlassMetricCardDemo } from "../components/showcase/GlassMetricCardDemo"
 import { Search, Mail, Sparkles, Send, Bell } from "lucide-react";
 
 import { BiteButton } from "../components/ui/BiteButton";
+import Typewriter from "../components/typewriter/Typewriter";
 
 export const registry = [
   {
@@ -92,6 +93,33 @@ export default function BiteButtonDemo() {
       { name: "onBite", type: "(biteCount: number) => void", default: "undefined", description: "Callback triggered on each bite click" },
       { name: "onReset", type: "() => void", default: "undefined", description: "Callback triggered on 360° spin reset" },
       { name: "className", type: "string", default: "undefined", description: "Additional classes for container styling" },
+    ],
+  },
+  {
+    slug: "typewriter",
+    name: "Typewriter",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "Skeuomorphic mechanical typewriter with interactive keyboard input, tactile keycap bevels, ribbon spools, hammer strike motion, spring-loaded carriage returns, bell flashes, and an ambient Three.js dust particle layer.",
+    tags: ["Typewriter", "Interactive", "Keyboard", "Skeuomorphism", "Three.js", "Framer Motion", "Retro"],
+    installation: "npx funui add typewriter",
+    demo: (
+      <div className="w-full flex flex-col items-center justify-center p-2">
+        <Typewriter />
+      </div>
+    ),
+    code: `import Typewriter from "@/components/typewriter/Typewriter";
+
+export default function TypewriterDemo() {
+  return (
+    <div className="flex items-center justify-center min-h-[500px] p-6 bg-zinc-950">
+      <Typewriter />
+    </div>
+  );
+}`,
+    props: [
+      { name: "className", type: "string", default: "''", description: "Optional CSS classes to customize the outer machine chassis" },
+      { name: "initialSound", type: "boolean", default: "true", description: "Whether synthesized mechanical typewriter sound effects start enabled" },
     ],
   },
   {
