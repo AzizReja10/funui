@@ -68,3 +68,25 @@ export function playSweep() {
     // Ignore
   }
 }
+
+export function playPaperFeed() {
+  try {
+    const c = getCtx();
+    if (!c) return;
+    for (let i = 0; i < 6; i++) {
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = "sawtooth";
+      const startTime = c.currentTime + i * 0.045;
+      osc.frequency.setValueAtTime(240 + i * 30, startTime);
+      gain.gain.setValueAtTime(0.035, startTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, startTime + 0.035);
+      osc.connect(gain).connect(c.destination);
+      osc.start(startTime);
+      osc.stop(startTime + 0.04);
+    }
+  } catch {
+    // Ignore
+  }
+}
+

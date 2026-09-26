@@ -119,6 +119,7 @@ export default function TypewriterDemo() {
 }`,
     props: [
       { name: "className", type: "string", default: "''", description: "Optional CSS classes to customize the outer machine chassis" },
+      { name: "maxLines", type: "number", default: "6", description: "Maximum lines per paper sheet before reaching the page end limit" },
       { name: "initialSound", type: "boolean", default: "true", description: "Whether synthesized mechanical typewriter sound effects start enabled" },
     ],
   },
