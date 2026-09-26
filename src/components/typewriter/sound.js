@@ -9,7 +9,7 @@ function getCtx() {
     }
   }
   if (ctx && ctx.state === "suspended") {
-    ctx.resume().catch(() => {});
+    ctx.resume().catch(() => { });
   }
   return ctx;
 }
