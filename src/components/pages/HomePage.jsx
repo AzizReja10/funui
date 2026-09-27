@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Sparkles, Terminal, Copy, Check, Shield, Zap, Layers, ArrowUpRight } from "lucide-react";
+import { ArrowRight, Sparkles, Terminal, Copy, Check, Shield, Zap, Layers, ArrowUpRight, Globe } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
 import { Switch } from "../ui/Switch";
@@ -189,7 +189,7 @@ export function HomePage({ onNavigate }) {
           {/* Card 5: Windows Timeline */}
           <div
             onClick={() => onNavigate("windows-timeline")}
-            className="rounded-2xl border border-border bg-bg p-6 hover:border-fg/30 transition-all cursor-pointer group shadow-2xs md:col-span-2"
+            className="rounded-2xl border border-border bg-bg p-6 hover:border-fg/30 transition-all cursor-pointer group shadow-2xs"
           >
             <div className="flex items-center justify-between mb-3">
               <span className="text-xs font-mono font-medium text-muted uppercase">05 / Windows Timeline</span>
@@ -200,25 +200,56 @@ export function HomePage({ onNavigate }) {
                 </span>
               </div>
             </div>
-            <div className="py-2 flex items-center justify-between flex-wrap gap-4">
-              <div className="flex items-center gap-3">
-                <div className="px-3.5 py-1.5 rounded-full bg-[#0078d4] text-white text-xs font-semibold flex items-center gap-2 shadow-xs">
-                  <span>Windows Evolution (1985–2021)</span>
+            <div className="py-2 flex items-center justify-between flex-wrap gap-2">
+              <div className="flex items-center gap-2">
+                <div className="px-3 py-1 rounded-full bg-[#0078d4] text-white text-[11px] font-semibold flex items-center gap-2 shadow-xs">
+                  <span>Windows Evolution</span>
                 </div>
-                <span className="text-xs font-mono text-muted hidden sm:inline">Classic • Aero Glass • Modern Flat</span>
+                <span className="text-[10px] font-mono text-muted hidden sm:inline">1985–2021</span>
               </div>
-              <div className="flex items-center gap-1.5 h-8 relative w-24">
+              <div className="flex items-center gap-1.5 h-6 relative w-20">
                 <div className="absolute inset-x-0 flex justify-between">
-                  <span className="w-px h-3 bg-border rounded-full" />
-                  <span className="w-px h-3 bg-border rounded-full" />
-                  <span className="w-px h-3 bg-border rounded-full" />
-                  <span className="w-px h-3 bg-border rounded-full" />
-                  <span className="w-px h-3 bg-border rounded-full" />
+                  <span className="w-px h-2.5 bg-border rounded-full" />
+                  <span className="w-px h-2.5 bg-border rounded-full" />
+                  <span className="w-px h-2.5 bg-border rounded-full" />
+                  <span className="w-px h-2.5 bg-border rounded-full" />
                 </div>
-                <div className="absolute left-1/2 -translate-x-1/2 w-[2px] h-5 bg-fg rounded-full" />
+                <div className="absolute left-1/2 -translate-x-1/2 w-[2px] h-4 bg-fg rounded-full" />
               </div>
             </div>
             <p className="text-xs text-muted mt-2">Continuous drag scrubber slider featuring floating logo marks, rolling odometer year, spring-snap release, and arrow-key accessibility.</p>
+          </div>
+
+          {/* Card 6: Realistic Globe */}
+          <div
+            onClick={() => onNavigate("realistic-globe")}
+            className="rounded-2xl border border-border bg-bg p-6 hover:border-fg/30 transition-all cursor-pointer group shadow-2xs"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-mono font-medium text-muted uppercase">06 / Realistic Globe</span>
+              <div className="flex items-center gap-2">
+                <Badge variant="lime" size="xs">Flagship 3D</Badge>
+                <span className="text-xs font-medium text-muted group-hover:text-fg flex items-center gap-1 transition-colors">
+                  Inspect <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </div>
+            </div>
+            <div className="py-2 flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 via-emerald-500 to-amber-400 flex items-center justify-center text-white text-xs shadow-md shadow-blue-500/20">
+                  <Globe size={14} />
+                </div>
+                <div>
+                  <span className="text-xs font-semibold text-fg">Satellite Earth</span>
+                  <div className="text-[10px] font-mono text-muted">NASA Textures • Relief Map • Zoom In</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-sky-500/10 text-sky-400 border border-sky-500/20">Three.js</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/10 text-amber-400 border border-amber-500/20">Fly-To Zoom</span>
+              </div>
+            </div>
+            <p className="text-xs text-muted mt-2">Photorealistic NASA satellite Earth globe with topographic relief, specular ocean reflections, drifting cloud deck, and interactive zoom fly-in effects.</p>
           </div>
         </div>
       </section>

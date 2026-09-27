@@ -12,6 +12,7 @@ import { BiteButton } from "../components/ui/BiteButton";
 import Typewriter from "../components/typewriter/Typewriter";
 import { WindowsTimeline } from "../components/ui/WindowsTimeline";
 import { WindowsTimelineDemo } from "../components/showcase/WindowsTimelineDemo";
+import { RealisticGlobeDemo } from "../components/showcase/RealisticGlobeDemo";
 
 export const registry = [
   {
@@ -657,6 +658,261 @@ export function HeroColorPanels() {
       { name: "fanned", type: "boolean", default: "false", description: "Whether the 3D color panels start expanded" },
       { name: "ctaText", type: "string", default: "'Browse Agents'", description: "Label for the primary CTA button" },
       { name: "showBadges", type: "boolean", default: "true", description: "Displays tech stack pills at bottom" },
+    ],
+  },
+  {
+    slug: "realistic-globe",
+    name: "Realistic Globe",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "Photorealistic 3D satellite Earth globe rendered with high-resolution NASA Blue Marble imagery, topographic normal relief, specular ocean reflections, drifting cloud deck, cinematic deep-space fly-in zoom, and interactive hub targeting.",
+    tags: ["Globe", "3D", "Three.js", "Earth", "Satellite", "NASA", "Zoom", "OrbitControls", "PBR"],
+    installation: "npx funui add realistic-globe",
+    demo: <RealisticGlobeDemo />,
+    code: `'use client';
+import { useEffect, useRef } from 'react';
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
+function latLngToVec3(lat, lon, radius = 1) {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lon + 180) * (Math.PI / 180);
+  return new THREE.Vector3(
+    -radius * Math.sin(phi) * Math.cos(theta),
+    radius * Math.cos(phi),
+    radius * Math.sin(phi) * Math.sin(theta)
+  );
+}
+
+function createRoughnessTexture(specularImg) {
+  const canvas = document.createElement('canvas');
+  canvas.width = specularImg.width || 1024;
+  canvas.height = specularImg.height || 512;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+  ctx.drawImage(specularImg, 0, 0, canvas.width, canvas.height);
+  const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const d = imgData.data;
+  for (let i = 0; i < d.length; i += 4) {
+    const isOcean = d[i] > 90;
+    const rough = isOcean ? 45 : 220;
+    d[i] = rough;
+    d[i + 1] = rough;
+    d[i + 2] = rough;
+    d[i + 3] = 255;
+  }
+  ctx.putImageData(imgData, 0, 0);
+  const tex = new THREE.CanvasTexture(canvas);
+  tex.colorSpace = THREE.NoColorSpace;
+  return tex;
+}
+
+const DEFAULT_HUBS = [
+  { name: 'New York', lat: 40.7, lon: -74.0 },
+  { name: 'London', lat: 51.5, lon: -0.1 },
+  { name: 'Tokyo', lat: 35.7, lon: 139.7 },
+  { name: 'Sydney', lat: -33.9, lon: 151.2 },
+  { name: 'São Paulo', lat: -23.5, lon: -46.6 },
+  { name: 'Cairo', lat: 30.0, lon: 31.2 },
+];
+const DEFAULT_ARC_PAIRS = [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0]];
+
+export default function RealisticGlobe({
+  className = '',
+  textureUrl = '/textures/earth_atmos_2048.jpg',
+  normalMapUrl = '/textures/earth_normal_2048.jpg',
+  specularMapUrl = '/textures/earth_specular_2048.jpg',
+  cloudsUrl = '/textures/earth_clouds_1024.png',
+  hubs = DEFAULT_HUBS,
+  arcPairs = DEFAULT_ARC_PAIRS,
+  autoRotate = true,
+  autoRotateSpeed = 0.6,
+  enableZoom = true,
+  zoomDistance = 3.8,
+  targetHub = null,
+  cinematicFlyIn = true,
+}) {
+  const mountRef = useRef(null);
+  const cameraRef = useRef(null);
+  const targetCamPosRef = useRef(null);
+
+  useEffect(() => {
+    if (!cameraRef.current) return;
+    if (targetHub && typeof targetHub.lat === 'number') {
+      const dir = latLngToVec3(targetHub.lat, targetHub.lon, 1).normalize();
+      targetCamPosRef.current = dir.multiplyScalar(2.1);
+    } else if (zoomDistance) {
+      const currentDir = cameraRef.current.position.clone().normalize();
+      targetCamPosRef.current = currentDir.multiplyScalar(zoomDistance);
+    }
+  }, [zoomDistance, targetHub]);
+
+  useEffect(() => {
+    const container = mountRef.current;
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    Object.assign(renderer.domElement.style, { width: '100%', height: '100%', display: 'block' });
+    container.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    cameraRef.current = camera;
+    camera.position.set(0, 0, cinematicFlyIn ? 10.5 : zoomDistance);
+
+    const R = 1;
+    const texLoader = new THREE.TextureLoader();
+
+    // Satellite Day Map & Normal Relief
+    const earthMap = texLoader.load(textureUrl);
+    earthMap.colorSpace = THREE.SRGBColorSpace;
+    const normalMap = normalMapUrl ? texLoader.load(normalMapUrl) : null;
+
+    const planetGeo = new THREE.SphereGeometry(R, 96, 96);
+    const planetMat = new THREE.MeshStandardMaterial({
+      map: earthMap,
+      normalMap: normalMap || undefined,
+      normalScale: normalMap ? new THREE.Vector2(0.85, 0.85) : undefined,
+      roughness: 0.65,
+      metalness: 0.1,
+    });
+
+    if (specularMapUrl) {
+      const specImg = new Image();
+      specImg.crossOrigin = 'anonymous';
+      specImg.onload = () => {
+        const roughnessTex = createRoughnessTexture(specImg);
+        if (roughnessTex) {
+          planetMat.roughnessMap = roughnessTex;
+          planetMat.roughness = 1.0;
+          planetMat.needsUpdate = true;
+        }
+      };
+      specImg.src = specularMapUrl;
+    }
+
+    const planet = new THREE.Mesh(planetGeo, planetMat);
+    scene.add(planet);
+
+    // Drifting Cloud Deck
+    let clouds = null;
+    if (cloudsUrl) {
+      const cloudTex = texLoader.load(cloudsUrl);
+      const cloudGeo = new THREE.SphereGeometry(R * 1.014, 96, 96);
+      const cloudMat = new THREE.MeshStandardMaterial({
+        map: cloudTex,
+        transparent: true,
+        opacity: 0.85,
+        depthWrite: false,
+        roughness: 1,
+      });
+      clouds = new THREE.Mesh(cloudGeo, cloudMat);
+      scene.add(clouds);
+    }
+
+    // Lights
+    scene.add(new THREE.AmbientLight(0xffffff, 0.45));
+    const sun = new THREE.DirectionalLight(0xffffff, 1.1);
+    sun.position.set(5, 2.5, 3.5);
+    scene.add(sun);
+
+    // OrbitControls with Zoom limits
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.08;
+    controls.enablePan = false;
+    controls.enableZoom = enableZoom;
+    controls.minDistance = 1.35;
+    controls.maxDistance = 10.0;
+    controls.autoRotate = autoRotate;
+    controls.autoRotateSpeed = autoRotateSpeed;
+
+    // Resize
+    function resize() {
+      const { clientWidth: w, clientHeight: h } = container;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    }
+    const ro = new ResizeObserver(resize);
+    ro.observe(container);
+    resize();
+
+    // Loop with Cinematic Deep-Space Zoom Fly-In
+    let elapsed = 0;
+    let flyInDone = !cinematicFlyIn;
+    let raf;
+    const clock = new THREE.Clock();
+
+    function animate() {
+      raf = requestAnimationFrame(animate);
+      const dt = clock.getDelta();
+
+      if (!flyInDone) {
+        elapsed += dt;
+        const p = Math.min(1, elapsed / 2.0);
+        const ease = 1 - Math.pow(1 - p, 4);
+        const dist = 10.5 - (10.5 - zoomDistance) * ease;
+        camera.position.copy(camera.position.clone().normalize().multiplyScalar(dist));
+        if (p >= 1) flyInDone = true;
+      }
+
+      if (targetCamPosRef.current) {
+        camera.position.lerp(targetCamPosRef.current, 0.06);
+        if (camera.position.distanceTo(targetCamPosRef.current) < 0.02) {
+          targetCamPosRef.current = null;
+        }
+      }
+
+      if (clouds) clouds.rotation.y += dt * 0.025;
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      controls.dispose();
+      renderer.dispose();
+      if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
+    };
+  }, [textureUrl, normalMapUrl, specularMapUrl, cloudsUrl, enableZoom, zoomDistance, cinematicFlyIn]);
+
+  return <div ref={mountRef} className={\`w-full h-full \${className}\`} />;
+}
+
+// Usage:
+export function GlobeDemo() {
+  return (
+    <div className="relative w-full aspect-square max-w-2xl mx-auto rounded-2xl border border-border bg-gradient-to-b from-surface/50 via-surface/20 to-bg overflow-hidden shadow-xs">
+      <RealisticGlobe />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(56,189,248,0.08),transparent_70%)]" />
+    </div>
+  );
+}`,
+    props: [
+      { name: "className", type: "string", default: "''", description: "Optional CSS classes for outer container" },
+      { name: "textureUrl", type: "string", default: "'/textures/earth_atmos_2048.jpg'", description: "High-resolution NASA Blue Marble satellite Earth texture URL" },
+      { name: "normalMapUrl", type: "string", default: "'/textures/earth_normal_2048.jpg'", description: "Topographic relief normal map for mountain ranges and trenches" },
+      { name: "specularMapUrl", type: "string", default: "'/textures/earth_specular_2048.jpg'", description: "Specular mask calibrated for realistic ocean highlights" },
+      { name: "cloudsUrl", type: "string", default: "'/textures/earth_clouds_1024.png'", description: "Realistic satellite cloud deck texture URL" },
+      { name: "enableZoom", type: "boolean", default: "true", description: "Allows interactive trackpad/scroll wheel zooming" },
+      { name: "zoomDistance", type: "number", default: "3.8", description: "Camera viewing distance (1.35 close-up to 10.0 deep space)" },
+      { name: "targetHub", type: "{ lat, lon, name }", default: "null", description: "Geographic coordinate to smoothly fly to and zoom into" },
+      { name: "cinematicFlyIn", type: "boolean", default: "true", description: "Enables dramatic deep-space decelerating fly-in on mount" },
+      { name: "autoRotate", type: "boolean", default: "true", description: "Enables orbital rotation with post-drag auto-resume" },
+      { name: "autoRotateSpeed", type: "number", default: "0.6", description: "Speed of orbital auto-rotation" },
+      { name: "hubs", type: "Array<{ name, lat, lon }>", default: "DEFAULT_HUBS", description: "Geographic city hub coordinates placed accurately on Earth" },
+      { name: "arcPairs", type: "Array<[number, number]>", default: "DEFAULT_ARC_PAIRS", description: "City index pairs connected by 3D Bezier light arcs" },
+      { name: "showClouds", type: "boolean", default: "true", description: "Renders the drifting satellite cloud deck" },
+      { name: "showArcs", type: "boolean", default: "true", description: "Renders connection arcs and traveling photon pulses" },
+      { name: "showStars", type: "boolean", default: "false", description: "Renders optional 3D starfield backdrop (false for clean light/dark theme integration)" },
+      { name: "onHubHover", type: "(hub, index) => void", default: "null", description: "Callback triggered with hub data and index when hovering over a city marker" },
+      { name: "onHubClick", type: "(hub, index) => void", default: "null", description: "Callback triggered with hub data and index when clicking a city marker" },
     ],
   },
 ];
