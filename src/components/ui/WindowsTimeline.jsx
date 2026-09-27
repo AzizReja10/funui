@@ -4,7 +4,7 @@ import { cn } from "../../lib/cn";
 import { OS_LIST } from "../../data/windowsTimelineData";
 import { WinLogo3D } from "./WinLogo3D";
 
-const AUTO_MS = 2200;
+const AUTO_MS = 2000;
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const pctFor = (i, count) => (count <= 1 ? 0 : (i / (count - 1)) * 100);
 

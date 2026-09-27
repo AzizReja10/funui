@@ -161,7 +161,7 @@ export const OS_LIST = [
   { year: 2021, name: 'Windows 11',     era: 'flat',    color: '#0067c0', logoSrc: '/18.png' },
 ];
 
-const AUTO_MS = 2200;
+const AUTO_MS = 2000;
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
 const pctFor = (i, count) => (count <= 1 ? 0 : (i / (count - 1)) * 100);
 
@@ -400,7 +400,7 @@ export default function WindowsTimeline({
     props: [
       { name: "items", type: "Array<{ year, name, era, color, logoSrc? }>", default: "OS_LIST", description: "Array of Windows milestones with year, display name, era ('classic' | 'aero' | 'flat'), brand color, and optional custom logo image URL" },
       { name: "autoPlay", type: "boolean", default: "true", description: "Whether the timeline automatically steps forward across milestone years" },
-      { name: "autoInterval", type: "number", default: "2200", description: "Auto-advance dwell time per year in milliseconds" },
+      { name: "autoInterval", type: "number", default: "2000", description: "Auto-advance dwell time per year in milliseconds" },
       { name: "defaultActive", type: "number", default: "0", description: "Initial selected year index" },
       { name: "onChange", type: "(item, index) => void", default: "undefined", description: "Callback triggered when year changes" },
       { name: "className", type: "string", default: "undefined", description: "Custom Tailwind class overrides for wrapper container" },
