@@ -10,6 +10,8 @@ import { Search, Mail, Sparkles, Send, Bell } from "lucide-react";
 
 import { BiteButton } from "../components/ui/BiteButton";
 import Typewriter from "../components/typewriter/Typewriter";
+import { WindowsTimeline } from "../components/ui/WindowsTimeline";
+import { WindowsTimelineDemo } from "../components/showcase/WindowsTimelineDemo";
 
 export const registry = [
   {
@@ -121,6 +123,287 @@ export default function TypewriterDemo() {
       { name: "className", type: "string", default: "''", description: "Optional CSS classes to customize the outer machine chassis" },
       { name: "maxLines", type: "number", default: "6", description: "Maximum lines per paper sheet before reaching the page end limit" },
       { name: "initialSound", type: "boolean", default: "true", description: "Whether synthesized mechanical typewriter sound effects start enabled" },
+    ],
+  },
+  {
+    slug: "windows-timeline",
+    name: "Windows Timeline",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "Minimalist multi-era Windows timeline slider featuring floating logo marks with custom logoSrc support, rolling odometer numbers, flat reference ticks, and continuous real-time drag scrubbing with spring snap physics and keyboard accessibility.",
+    tags: ["Timeline", "Slider", "Interactive", "Framer Motion", "Draggable", "Scrubber", "Windows", "Accessible"],
+    installation: "npx funui add windows-timeline",
+    demo: <WindowsTimelineDemo />,
+    code: `import { useEffect, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+// ---- data --------------------------------------------------------------
+// Chronological timeline of all Windows releases with their respective logos.
+// Supports both imported asset modules (e.g. \`import logo1 from './logos/1.png'\`) and static URLs:
+export const OS_LIST = [
+  { year: 1985, name: 'Windows 1.0',    era: 'classic', color: '#008080', logoSrc: '/logos/windows/1.png' },
+  { year: 1990, name: 'Windows 3.0',    era: 'classic', color: '#4a5568', logoSrc: '/2.png' },
+  { year: 1992, name: 'Windows 3.1',    era: 'classic', color: '#000080', logoSrc: '/3.png' },
+  { year: 1993, name: 'Windows NT 3.1', era: 'classic', color: '#1a365d', logoSrc: '/4.png' },
+  { year: 1994, name: 'Windows NT 3.5', era: 'classic', color: '#008080', logoSrc: '/5.png' },
+  { year: 1995, name: 'Windows 95',     era: 'classic', color: '#008080', logoSrc: '/6.png' },
+  { year: 1996, name: 'Windows NT 4.0', era: 'classic', color: '#2b6cb0', logoSrc: '/7.png' },
+  { year: 1998, name: 'Windows 98',     era: 'classic', color: '#3a6ea5', logoSrc: '/8.png' },
+  { year: 2000, name: 'Windows ME',     era: 'classic', color: '#2e8540', logoSrc: '/9.png' },
+  { year: 2000, name: 'Windows 2000',   era: 'classic', color: '#3a6ea5', logoSrc: '/10.png' },
+  { year: 2001, name: 'Windows XP',     era: 'aero',    color: '#2a8ddc', logoSrc: '/11.png' },
+  { year: 2006, name: 'Windows Vista',  era: 'aero',    color: '#2f6fb8', logoSrc: '/12.png' },
+  { year: 2009, name: 'Windows 7',      era: 'aero',    color: '#1e88c7', logoSrc: '/13.png' },
+  { year: 2012, name: 'Windows 8',      era: 'flat',    color: '#00a4ef', logoSrc: '/14.png' },
+  { year: 2013, name: 'Windows 8.1',    era: 'flat',    color: '#0097e6', logoSrc: '/15.png' },
+  { year: 2015, name: 'Windows 10',     era: 'flat',    color: '#0078d4', logoSrc: '/16.png' },
+  { year: 2020, name: 'Windows 10X',    era: 'flat',    color: '#0091ff', logoSrc: '/17.png' },
+  { year: 2021, name: 'Windows 11',     era: 'flat',    color: '#0067c0', logoSrc: '/18.png' },
+];
+
+const AUTO_MS = 2200;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const pctFor = (i, count) => (count <= 1 ? 0 : (i / (count - 1)) * 100);
+
+export function WinMark({ entry, size = 72, className }) {
+  if (entry.logoSrc) {
+    return (
+      <img
+        src={entry.logoSrc}
+        alt={entry.name}
+        className="h-16 sm:h-20 w-auto max-w-[220px] object-contain select-none drop-shadow-sm dark:drop-shadow-[0_0_1.5px_rgba(255,255,255,0.75)]"
+        draggable={false}
+      />
+    );
+  }
+  const glossy = entry.era === 'aero';
+  return (
+    <svg width={size} height={size} viewBox="0 0 100 100" fill="none" className={className}>
+      <path d="M4 14 L46 8 L46 47 L4 51 Z" fill={entry.color} />
+      <path d="M50 7.4 L96 2 L96 46.4 L50 47 Z" fill={entry.color} />
+      <path d="M4 55 L46 55.6 L46 94.6 L4 98 Z" fill={entry.color} opacity="0.94" />
+      <path d="M50 55.6 L96 56.2 L96 100 L50 99.4 Z" fill={entry.color} opacity="0.94" />
+      {glossy && <path d="M4 14 L96 2 L96 30 L4 38 Z" fill="white" opacity="0.22" />}
+    </svg>
+  );
+}
+
+export function RollingNumber({ value, className }) {
+  const digits = String(value).split('');
+  return (
+    <span className={\`inline-flex \${className || ''}\`}>
+      {digits.map((d, i) => (
+        <span key={i} className="relative inline-block overflow-hidden" style={{ width: '0.62em', height: '1.1em' }}>
+          <AnimatePresence mode="popLayout" initial={false}>
+            <motion.span
+              key={d}
+              initial={{ y: 18, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -18, opacity: 0 }}
+              transition={{ duration: 0.28, ease: 'easeOut' }}
+              className="absolute inset-0 flex items-center justify-center"
+            >
+              {d}
+            </motion.span>
+          </AnimatePresence>
+        </span>
+      ))}
+    </span>
+  );
+}
+
+export function CrossfadeText({ value, className }) {
+  return (
+    <span className={\`relative inline-block overflow-hidden \${className || ''}\`}>
+      <AnimatePresence mode="popLayout" initial={false}>
+        <motion.span
+          key={value}
+          initial={{ y: 10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -10, opacity: 0 }}
+          transition={{ duration: 0.22, ease: 'easeOut' }}
+          className="block whitespace-nowrap"
+        >
+          {value}
+        </motion.span>
+      </AnimatePresence>
+    </span>
+  );
+}
+
+export default function WindowsTimeline({
+  items = OS_LIST,
+  autoPlay = true,
+  autoInterval = AUTO_MS,
+  defaultActive = 0,
+  onChange,
+}) {
+  const [active, setActive] = useState(defaultActive);
+  const [playing, setPlaying] = useState(autoPlay);
+  const [dragging, setDragging] = useState(false);
+  const [dragPct, setDragPct] = useState(null);
+  const trackRef = useRef(null);
+  const count = items.length;
+
+  useEffect(() => {
+    if (!playing || count === 0) return;
+    const id = setInterval(() => {
+      setActive((a) => {
+        const next = (a + 1) % count;
+        onChange?.(items[next], next);
+        return next;
+      });
+    }, autoInterval);
+    return () => clearInterval(id);
+  }, [playing, count, autoInterval, items, onChange]);
+
+  function updateFromClientX(clientX) {
+    const track = trackRef.current;
+    if (!track) return;
+    const rect = track.getBoundingClientRect();
+    const fraction = rect.width > 0 ? clamp((clientX - rect.left) / rect.width, 0, 1) : 0;
+    const nearest = Math.round(fraction * (count - 1));
+    setActive(nearest);
+    setDragPct(fraction * 100);
+    onChange?.(items[nearest], nearest);
+  }
+
+  function onPointerDown(e) {
+    setPlaying(false);
+    setDragging(true);
+    e.currentTarget.setPointerCapture?.(e.pointerId);
+    updateFromClientX(e.clientX);
+  }
+
+  function onPointerMove(e) {
+    if (dragging) updateFromClientX(e.clientX);
+  }
+
+  function onPointerUp() {
+    setDragging(false);
+    setDragPct(null);
+    if (autoPlay) setPlaying(true);
+  }
+
+  function onKeyDown(e) {
+    if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      setActive((a) => {
+        const next = Math.min(count - 1, a + 1);
+        onChange?.(items[next], next);
+        return next;
+      });
+    }
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      setActive((a) => {
+        const next = Math.max(0, a - 1);
+        onChange?.(items[next], next);
+        return next;
+      });
+    }
+  }
+
+  const displayPct = dragging && dragPct != null ? dragPct : pctFor(active, count);
+  const current = items[active] || items[0];
+
+  return (
+    <div
+      className="w-full max-w-3xl mx-auto px-4 sm:px-8 py-10 sm:py-14 select-none"
+      onMouseEnter={() => !dragging && setPlaying(false)}
+      onMouseLeave={() => !dragging && autoPlay && setPlaying(true)}
+    >
+      {/* logo + year + name */}
+      <div className="flex flex-col items-center gap-3 mb-14 min-h-[150px] justify-center">
+        <div className="h-20 flex items-center justify-center">
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 10, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.92 }}
+              transition={{ duration: 0.22, ease: 'easeOut' }}
+              className="flex items-center justify-center"
+            >
+              <WinMark entry={current} size={72} />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+        <div className="flex flex-col items-center leading-tight">
+          <div className="font-sans font-semibold text-2xl text-gray-900 dark:text-zinc-100">
+            <RollingNumber value={current.year} />
+          </div>
+          <CrossfadeText
+            value={current.name}
+            className="font-sans text-sm text-gray-500 dark:text-zinc-400 mt-0.5"
+          />
+        </div>
+      </div>
+
+      {/* draggable scrubber */}
+      <div
+        ref={trackRef}
+        role="slider"
+        tabIndex={0}
+        aria-valuemin={0}
+        aria-valuemax={count - 1}
+        aria-valuenow={active}
+        aria-valuetext={\`\${current.name} (\${current.year})\`}
+        onKeyDown={onKeyDown}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
+        className="relative h-10 flex items-center cursor-pointer touch-none outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-lg select-none"
+      >
+        {/* flat reference ticks */}
+        <div className="absolute inset-x-0 flex justify-between pointer-events-none px-[1px]">
+          {items.map((e, i) => (
+            <span
+              key={\`\${e.name}-\${e.year}-\${i}\`}
+              className="w-px h-4 bg-gray-300 dark:bg-zinc-700 rounded-full"
+            />
+          ))}
+        </div>
+
+        {/* the draggable handle */}
+        <motion.div
+          className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-[3px] h-9 bg-gray-900 dark:bg-zinc-100 rounded-full shadow-xs cursor-grab active:cursor-grabbing"
+          animate={{ left: \`\${displayPct}%\` }}
+          transition={dragging ? { duration: 0 } : { type: 'spring', stiffness: 320, damping: 30 }}
+        />
+      </div>
+
+      {/* year labels */}
+      <div className="flex justify-between mt-3 px-[1px]">
+        {items.map((e, i) => (
+          <span
+            key={\`\${e.name}-\${e.year}-\${i}\`}
+            onClick={() => {
+              setActive(i);
+              onChange?.(items[i], i);
+            }}
+            className={\`text-[9px] sm:text-[10px] md:text-[11px] font-mono transition-colors cursor-pointer select-none text-center \${
+              i === active
+                ? 'font-bold text-gray-900 dark:text-zinc-100 scale-105'
+                : 'text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'
+            }\`}
+          >
+            <span className="hidden sm:inline">{e.year}</span>
+            <span className="sm:hidden">'{String(e.year).slice(-2)}</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}`,
+    props: [
+      { name: "items", type: "Array<{ year, name, era, color, logoSrc? }>", default: "OS_LIST", description: "Array of Windows milestones with year, display name, era ('classic' | 'aero' | 'flat'), brand color, and optional custom logo image URL" },
+      { name: "autoPlay", type: "boolean", default: "true", description: "Whether the timeline automatically steps forward across milestone years" },
+      { name: "autoInterval", type: "number", default: "2200", description: "Auto-advance dwell time per year in milliseconds" },
+      { name: "defaultActive", type: "number", default: "0", description: "Initial selected year index" },
+      { name: "onChange", type: "(item, index) => void", default: "undefined", description: "Callback triggered when year changes" },
+      { name: "className", type: "string", default: "undefined", description: "Custom Tailwind class overrides for wrapper container" },
     ],
   },
   {
