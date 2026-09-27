@@ -13,6 +13,7 @@ import Typewriter from "../components/typewriter/Typewriter";
 import { WindowsTimeline } from "../components/ui/WindowsTimeline";
 import { WindowsTimelineDemo } from "../components/showcase/WindowsTimelineDemo";
 import { RealisticGlobeDemo } from "../components/showcase/RealisticGlobeDemo";
+import { LiquidOrbDemo } from "../components/showcase/LiquidOrbDemo";
 
 export const registry = [
   {
@@ -913,6 +914,172 @@ export function GlobeDemo() {
       { name: "showStars", type: "boolean", default: "false", description: "Renders optional 3D starfield backdrop (false for clean light/dark theme integration)" },
       { name: "onHubHover", type: "(hub, index) => void", default: "null", description: "Callback triggered with hub data and index when hovering over a city marker" },
       { name: "onHubClick", type: "(hub, index) => void", default: "null", description: "Callback triggered with hub data and index when clicking a city marker" },
+      { name: "onLocationSelect", type: "(location) => void", default: "null", description: "Callback triggered when clicking anywhere on the globe, providing country name, code, flag, region, and exact lat/lon" },
+    ],
+  },
+  {
+    slug: "liquid-orb",
+    name: "Liquid Orb 3D",
+    category: "3D & Creative",
+    badge: "Creative",
+    description: "Creative, lightweight Three.js fluid morphing sculpture with procedural harmonic waves, spring jello squish physics, mouse tilt, and 5 PBR material treatments with 0 KB texture assets.",
+    tags: ["Three.js", "3D", "Liquid", "Orb", "Creative", "PBR", "Chrome", "Interactive", "Harmonic"],
+    installation: "npx funui add liquid-orb",
+    demo: <LiquidOrbDemo />,
+    code: `import { useEffect, useRef } from "react";
+import * as THREE from "three";
+
+export default function LiquidOrb({
+  shape = "sphere", // 'sphere' | 'knot' | 'crystal' | 'ring'
+  preset = "chrome", // 'chrome' | 'iridescent' | 'neon' | 'glass' | 'obsidian'
+  speed = 1.0,
+  distortion = 0.32,
+  interactive = true,
+  wireframe = false,
+  className = "",
+}) {
+  const mountRef = useRef(null);
+
+  useEffect(() => {
+    const container = mountRef.current;
+    if (!container) return;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    Object.assign(renderer.domElement.style, { width: "100%", height: "100%", display: "block" });
+    container.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+    camera.position.set(0, 0, 4.6);
+
+    // Procedural geometry
+    let geo;
+    if (shape === "knot") geo = new THREE.TorusKnotGeometry(0.95, 0.32, 100, 24);
+    else if (shape === "crystal") geo = new THREE.IcosahedronGeometry(1.35, 4);
+    else geo = new THREE.SphereGeometry(1.35, 54, 54);
+
+    const origPositions = Float32Array.from(geo.attributes.position.array);
+
+    const mat = new THREE.MeshStandardMaterial({
+      color: preset === "neon" ? 0x141e06 : 0xf3f4f6,
+      roughness: preset === "chrome" ? 0.12 : 0.25,
+      metalness: 0.92,
+      wireframe,
+    });
+    const mesh = new THREE.Mesh(geo, mat);
+    scene.add(mesh);
+
+    // Studio lights
+    scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    dirLight.position.set(4, 5, 4);
+    scene.add(dirLight);
+
+    let squish = 1.0;
+    let squishVelocity = 0;
+    const mouse = { x: 0, y: 0, targetX: 0, targetY: 0 };
+
+    const handlePointerMove = (e) => {
+      const rect = container.getBoundingClientRect();
+      mouse.targetX = (((e.clientX - rect.left) / rect.width) * 2 - 1) * 0.6;
+      mouse.targetY = -(((e.clientY - rect.top) / rect.height) * 2 - 1) * 0.6;
+    };
+
+    const handleClick = () => {
+      squishVelocity = -0.35; // Tactile jello squish
+    };
+
+    if (interactive) {
+      container.addEventListener("pointermove", handlePointerMove);
+      container.addEventListener("click", handleClick);
+    }
+
+    let raf;
+    const clock = new THREE.Clock();
+
+    function animate() {
+      raf = requestAnimationFrame(animate);
+      const dt = clock.getDelta();
+      const t = clock.getElapsedTime() * speed;
+
+      // Spring squish
+      squishVelocity += (1.0 - squish) * 16.0 * dt;
+      squishVelocity *= Math.pow(0.12, dt);
+      squish += squishVelocity;
+
+      // Procedural harmonic fluid ripple
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const ox = origPositions[i * 3];
+        const oy = origPositions[i * 3 + 1];
+        const oz = origPositions[i * 3 + 2];
+        const wave = Math.sin(ox * 2.4 + t * 2.2) * Math.cos(oy * 2.4 + t * 1.8) * Math.sin(oz * 2.4 + t * 2.0);
+        const disp = 1.0 + wave * distortion * 0.32;
+        pos.setXYZ(i, ox * disp * squish, oy * disp * (2.0 - squish), oz * disp * squish);
+      }
+      pos.needsUpdate = true;
+      geo.computeVertexNormals();
+
+      mouse.x += (mouse.targetX - mouse.x) * 0.08;
+      mouse.y += (mouse.targetY - mouse.y) * 0.08;
+      mesh.rotation.x = mouse.y * 0.5;
+      mesh.rotation.y += dt * 0.4 + mouse.x * 0.02;
+
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    const resize = () => {
+      const { clientWidth: w, clientHeight: h } = container;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false);
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+    };
+    const ro = new ResizeObserver(resize);
+    ro.observe(container);
+    resize();
+
+    return () => {
+      cancelAnimationFrame(raf);
+      ro.disconnect();
+      if (interactive) {
+        container.removeEventListener("pointermove", handlePointerMove);
+        container.removeEventListener("click", handleClick);
+      }
+      geo.dispose();
+      mat.dispose();
+      renderer.dispose();
+      if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
+    };
+  }, [shape, preset, speed, distortion, interactive, wireframe]);
+
+  return <div ref={mountRef} className={\`w-full h-full cursor-grab \${className}\`} />;
+}
+
+// Usage:
+export function Demo() {
+  return (
+    <div className="w-80 h-80 rounded-2xl border border-border bg-surface/50">
+      <LiquidOrb shape="sphere" preset="chrome" />
+    </div>
+  );
+}`,
+    props: [
+      { name: "shape", type: "'sphere' | 'knot' | 'crystal' | 'ring'", default: "'sphere'", description: "3D base geometry (Fluid Blob, Infinity Knot, Prism Crystal, Halo Ring)" },
+      { name: "preset", type: "'chrome' | 'iridescent' | 'neon' | 'glass' | 'obsidian'", default: "'chrome'", description: "PBR studio lighting and material preset" },
+      { name: "speed", type: "number", default: "1.0", description: "Speed of harmonic fluid ripples and auto-rotation" },
+      { name: "distortion", type: "number", default: "0.32", description: "Amplitude of fluid wave displacement (0.0 for rigid, 0.8 for dramatic liquid waves)" },
+      { name: "interactive", type: "boolean", default: "true", description: "Enables spring cursor tilt tracking and click jello squish physics" },
+      { name: "wireframe", type: "boolean", default: "false", description: "Renders procedural 3D polygon wireframe cage" },
+      { name: "showHalos", type: "boolean", default: "true", description: "Renders dual counter-rotating quantum gimbal halo rings with orbiting photon beads" },
+      { name: "showFireflies", type: "boolean", default: "true", description: "Renders two dancing 3D Lissajous firefly light probes casting moving specular glints" },
+      { name: "showParticles", type: "boolean", default: "true", description: "Renders a celestial swarm of 70 orbiting stardust embers that scatter on click" },
+      { name: "magneticCursor", type: "boolean", default: "true", description: "Tidal ferrofluid surface pull that bulges directly towards the cursor in 3D" },
+      { name: "autoRotate", type: "boolean", default: "true", description: "Enables continuous smooth orbital rotation" },
     ],
   },
 ];

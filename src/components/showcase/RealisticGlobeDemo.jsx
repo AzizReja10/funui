@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { RealisticGlobe } from '../ui/RealisticGlobe';
 import { DEFAULT_HUBS } from '../../data/globeData';
-import { Play, Pause, RotateCcw, ZoomIn, ZoomOut, Eye, Radio, Globe, Navigation, Compass } from 'lucide-react';
+import { Play, Pause, RotateCcw, ZoomIn, ZoomOut, Eye, Radio, Globe, Compass } from 'lucide-react';
 import { Badge } from '../ui/Badge';
 import { cn } from '../../lib/cn';
 
@@ -163,35 +163,6 @@ export function RealisticGlobeDemo() {
           onHubClick={handleSelectCity}
           className="relative z-10"
         />
-
-        {/* Drag & Zoom Hint overlay on bottom left */}
-        <div className="pointer-events-none absolute bottom-4 left-4 z-20 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface/90 dark:bg-zinc-900/90 border border-border shadow-xs backdrop-blur-md text-[11px] text-fg font-mono">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Scroll to zoom • Drag to rotate</span>
-        </div>
-
-        {/* Active Focus Pill on bottom right */}
-        {targetHub ? (
-          <div className="absolute bottom-4 right-4 z-20 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/10 dark:bg-amber-500/20 border border-amber-500/30 backdrop-blur-md text-[11px] text-amber-700 dark:text-amber-300 font-mono shadow-xs">
-            <Navigation size={12} className="text-amber-500" />
-            <span className="font-semibold">Target: {targetHub.name} ({targetHub.lat}°, {targetHub.lon}°)</span>
-            <button
-              onClick={() => {
-                setTargetHub(null);
-                setZoomDistance(3.8);
-                setAutoRotate(true);
-              }}
-              className="ml-1 text-xs text-muted hover:text-fg cursor-pointer"
-            >
-              ✕
-            </button>
-          </div>
-        ) : (
-          <div className="pointer-events-none absolute bottom-4 right-4 z-20 hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-surface/90 dark:bg-zinc-900/90 border border-border shadow-xs backdrop-blur-md text-[11px] text-muted font-mono">
-            <Radio size={12} className="text-amber-500 animate-pulse" />
-            <span>Hover city for info • Click to zoom</span>
-          </div>
-        )}
       </div>
 
       {/* Feature toggles & hub pills footer */}

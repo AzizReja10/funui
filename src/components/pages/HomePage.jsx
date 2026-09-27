@@ -251,6 +251,38 @@ export function HomePage({ onNavigate }) {
             </div>
             <p className="text-xs text-muted mt-2">Photorealistic NASA satellite Earth globe with topographic relief, specular ocean reflections, drifting cloud deck, and interactive zoom fly-in effects.</p>
           </div>
+
+          {/* Card 7: Liquid Orb 3D */}
+          <div
+            onClick={() => onNavigate("liquid-orb")}
+            className="rounded-2xl border border-border bg-bg p-6 hover:border-fg/30 transition-all cursor-pointer group shadow-2xs"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-mono font-medium text-muted uppercase">07 / Liquid Orb 3D</span>
+              <div className="flex items-center gap-2">
+                <Badge variant="lime" size="xs">Creative</Badge>
+                <span className="text-xs font-medium text-muted group-hover:text-fg flex items-center gap-1 transition-colors">
+                  Inspect <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </div>
+            </div>
+            <div className="py-2 flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-500 via-sky-400 to-neon-lime flex items-center justify-center text-black text-xs shadow-md shadow-purple-500/20">
+                  <Sparkles size={14} className="text-black" />
+                </div>
+                <div>
+                  <span className="text-xs font-semibold text-fg">Fluid Mesh & Jello Squish</span>
+                  <div className="text-[10px] font-mono text-muted">0 KB Textures • Harmonic Waves • PBR Presets</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-neon-lime/10 text-[#6d8a00] dark:text-neon-lime border border-neon-lime/30">Three.js</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-purple-500/10 text-purple-600 dark:text-purple-400 border border-purple-500/20">Chrome PBR</span>
+              </div>
+            </div>
+            <p className="text-xs text-muted mt-2">Lightweight procedural fluid sculpture with organic harmonic ripples, spring squish physics, mouse tilt, and 5 PBR materials.</p>
+          </div>
         </div>
       </section>
 
