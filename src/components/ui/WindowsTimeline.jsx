@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "../../lib/cn";
 import { OS_LIST } from "../../data/windowsTimelineData";
+import { WinLogo3D } from "./WinLogo3D";
 
 const AUTO_MS = 2200;
 const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
@@ -172,20 +173,9 @@ export function WindowsTimeline({
       onMouseLeave={() => !dragging && autoPlay && setPlaying(true)}
     >
       {/* logo + year + name — plain, no button/pill chrome */}
-      <div className="flex flex-col items-center gap-3 mb-14 min-h-[150px] justify-center">
-        <div className="h-20 flex items-center justify-center">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={active}
-              initial={{ opacity: 0, y: 10, scale: 0.92 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -10, scale: 0.92 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-              className="flex items-center justify-center"
-            >
-              <WinMark entry={current} size={72} />
-            </motion.div>
-          </AnimatePresence>
+      <div className="flex flex-col items-center gap-3 mb-14 min-h-[180px] justify-center">
+        <div className="h-28 sm:h-32 flex items-center justify-center">
+          <WinLogo3D entry={current} activeIndex={active} items={items} />
         </div>
         <div className="flex flex-col items-center leading-tight">
           <div className="font-sans font-semibold text-2xl text-gray-900 dark:text-zinc-100">
@@ -257,4 +247,5 @@ export function WindowsTimeline({
   );
 }
 
+export { WinLogo3D };
 export default WindowsTimeline;

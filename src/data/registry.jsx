@@ -130,8 +130,8 @@ export default function TypewriterDemo() {
     name: "Windows Timeline",
     category: "Featured & Hero",
     badge: "new",
-    description: "Minimalist multi-era Windows timeline slider featuring floating logo marks with custom logoSrc support, rolling odometer numbers, flat reference ticks, and continuous real-time drag scrubbing with spring snap physics and keyboard accessibility.",
-    tags: ["Timeline", "Slider", "Interactive", "Framer Motion", "Draggable", "Scrubber", "Windows", "Accessible"],
+    description: "Minimalist multi-era Windows timeline slider featuring a simple Three.js 3D logo flip transition, rolling odometer numbers, flat reference ticks, and continuous real-time drag scrubbing with spring snap physics and keyboard accessibility.",
+    tags: ["Timeline", "Slider", "Interactive", "Three.js", "Framer Motion", "Draggable", "Scrubber", "Windows", "Accessible"],
     installation: "npx funui add windows-timeline",
     demo: <WindowsTimelineDemo />,
     code: `import { useEffect, useRef, useState } from 'react';
