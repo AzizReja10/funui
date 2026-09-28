@@ -14,6 +14,8 @@ import { WindowsTimeline } from "../components/ui/WindowsTimeline";
 import { WindowsTimelineDemo } from "../components/showcase/WindowsTimelineDemo";
 import { RealisticGlobeDemo } from "../components/showcase/RealisticGlobeDemo";
 import { LiquidOrbDemo } from "../components/showcase/LiquidOrbDemo";
+import { UploadCard } from "../components/ui/UploadCard";
+import { UploadCardDemo } from "../components/showcase/UploadCardDemo";
 
 export const registry = [
   {
@@ -99,6 +101,40 @@ export default function BiteButtonDemo() {
       { name: "onBite", type: "(biteCount: number) => void", default: "undefined", description: "Callback triggered on each bite click" },
       { name: "onReset", type: "() => void", default: "undefined", description: "Callback triggered on 360° spin reset" },
       { name: "className", type: "string", default: "undefined", description: "Additional classes for container styling" },
+    ],
+  },
+  {
+    slug: "upload-card",
+    name: "Upload Card",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "High-performance video upload card driven by Framer Motion springs and GSAP timelines. Features 3D cursor tilt, glowing corner reticles, traveling photon arc bead, 20-segment spring equalizer, real-time speed & ETA telemetry, and a multi-shape 3D celebration confetti burst.",
+    tags: ["Upload", "Video", "GSAP", "Framer Motion", "Progress", "Equalizer", "Confetti", "Interactive", "Micro-Interactions"],
+    installation: "components/ui/UploadCard.jsx",
+    dependencies: ["framer-motion", "gsap", "lucide-react"],
+    demo: <UploadCardDemo />,
+    code: `import { UploadCard } from "@/components/ui/UploadCard";
+
+export default function UploadCardExample() {
+  return (
+    <div className="flex items-center justify-center p-8 bg-zinc-950 min-h-[500px]">
+      <UploadCard
+        uploadDuration={7.5}
+        enableSound={true}
+        onUploadComplete={(file) => {
+          console.log("Upload completed:", file.name);
+        }}
+      />
+    </div>
+  );
+}`,
+    props: [
+      { name: "uploadDuration", type: "number", default: "7.5", description: "Simulated upload duration in seconds" },
+      { name: "initialFile", type: "File | { name, size, type }", default: "null", description: "Initial file object or mock video metadata" },
+      { name: "enableSound", type: "boolean", default: "true", description: "Enables synthetic Web Audio API procedural sound feedback (blips, ticks, chime)" },
+      { name: "presetFiles", type: "Array<{ name, size, type, res? }>", default: "[...]", description: "List of preset demo video files available for one-click simulation" },
+      { name: "onUploadComplete", type: "(file: File) => void", default: "undefined", description: "Callback triggered once the upload progress reaches 100%" },
+      { name: "className", type: "string", default: "''", description: "Optional CSS classes to append to the wrapper container" },
     ],
   },
   {

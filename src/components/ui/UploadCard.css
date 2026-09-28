@@ -1,0 +1,719 @@
+/* UploadCard.css - Premium Animated Video Upload Card */
+:root {
+  --uc-bg: #0d0f14;
+  --uc-card: #151922;
+  --uc-card-border: #262c39;
+  --uc-text: #eef1f7;
+  --uc-muted: #8a93a6;
+  --uc-track: #1e2430;
+  --uc-accent: #8b7cff;
+  --uc-accent-glow: rgba(139, 124, 255, 0.35);
+  --uc-accent-light: #a79aff;
+  --uc-warn: #f59e0b;
+  --uc-warn-glow: rgba(245, 158, 11, 0.35);
+  --uc-ok: #10b981;
+  --uc-ok-glow: rgba(16, 185, 129, 0.35);
+  --uc-surface-glass: rgba(21, 25, 34, 0.85);
+}
+
+/* Light Theme Variables */
+:root:not(.dark) {
+  --uc-bg: #f8fafc;
+  --uc-card: #ffffff;
+  --uc-card-border: #e2e8f0;
+  --uc-text: #0f172a;
+  --uc-muted: #64748b;
+  --uc-track: #e2e8f0;
+  --uc-accent: #6366f1;
+  --uc-accent-glow: rgba(99, 102, 241, 0.25);
+  --uc-accent-light: #818cf8;
+  --uc-warn: #d97706;
+  --uc-warn-glow: rgba(217, 119, 6, 0.25);
+  --uc-ok: #059669;
+  --uc-ok-glow: rgba(5, 150, 105, 0.25);
+  --uc-surface-glass: rgba(255, 255, 255, 0.9);
+}
+
+.uc-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.uc-card {
+  --c: var(--uc-accent);
+  --c-glow: var(--uc-accent-glow);
+  position: relative;
+  width: min(440px, 94vw);
+  padding: 32px 26px 24px;
+  text-align: center;
+  background: var(--uc-card);
+  border: 1px solid var(--uc-card-border);
+  border-radius: 24px;
+  color: var(--uc-text);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: border-color 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    background 0.35s ease;
+  overflow: hidden;
+  user-select: none;
+}
+
+.uc-card[data-status="paused"] {
+  --c: var(--uc-warn);
+  --c-glow: var(--uc-warn-glow);
+}
+
+.uc-card[data-status="done"] {
+  --c: var(--uc-ok);
+  --c-glow: var(--uc-ok-glow);
+}
+
+.uc-card[data-status="idle"] {
+  cursor: pointer;
+}
+
+.uc-card[data-status="idle"]:hover,
+.uc-card.drag {
+  border-color: var(--c);
+  box-shadow: 0 14px 40px -10px var(--c-glow),
+    0 0 0 1px var(--c),
+    0 0 24px var(--c-glow);
+}
+
+/* Ambient Cursor Spotlight */
+.uc-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.uc-card:hover .uc-spotlight {
+  opacity: 1;
+}
+
+/* Ambient Animated Radial Aura */
+.uc-ambient-glow {
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, var(--c-glow) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(40px);
+  opacity: 0.55;
+  transition: background 0.4s ease, opacity 0.4s ease;
+  z-index: 0;
+}
+
+/* Corner Reticle Brackets (4 corners) */
+.uc-corner {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--c);
+  opacity: 0.6;
+  pointer-events: none;
+  transition: border-color 0.3s ease, opacity 0.3s ease;
+  z-index: 2;
+}
+
+.uc-corner.tl {
+  top: 14px;
+  left: 14px;
+  border-right: 0;
+  border-bottom: 0;
+  border-radius: 8px 0 0 0;
+}
+
+.uc-corner.tr {
+  top: 14px;
+  right: 14px;
+  border-left: 0;
+  border-bottom: 0;
+  border-radius: 0 8px 0 0;
+}
+
+.uc-corner.bl {
+  bottom: 14px;
+  left: 14px;
+  border-right: 0;
+  border-top: 0;
+  border-radius: 0 0 0 8px;
+}
+
+.uc-corner.br {
+  bottom: 14px;
+  right: 14px;
+  border-left: 0;
+  border-top: 0;
+  border-radius: 0 0 8px 0;
+}
+
+.uc-card.drag .uc-corner {
+  opacity: 1;
+  filter: drop-shadow(0 0 6px var(--c));
+}
+
+/* Central Ring Stage */
+.uc-ring-stage {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  margin: 0 auto 18px;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+}
+
+/* Concentric Background Aura Rings */
+.uc-pulse-aura {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  border: 1px dashed var(--c);
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+/* Three.js 3D Orbital Stardust Canvas */
+.uc-three-stage {
+  position: absolute;
+  inset: -6px;
+  pointer-events: none;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  overflow: visible;
+}
+
+.uc-three-stage canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+.uc-ring-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  filter: drop-shadow(0 0 8px var(--c-glow));
+}
+
+.uc-ring-track {
+  fill: none;
+  stroke: var(--uc-track);
+  stroke-width: 5;
+  transition: stroke 0.3s ease;
+}
+
+.uc-ring-fg {
+  fill: none;
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  transition: stroke 0.3s ease;
+}
+
+/* Glowing Photon Bead at the tip of progress */
+.uc-progress-bead {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 10px 2px var(--c), 0 0 20px 4px var(--c-glow);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 4;
+}
+
+/* Center Icon Box */
+.uc-icon-box {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--c);
+  z-index: 3;
+  transition: color 0.3s ease;
+}
+
+.uc-glyph {
+  width: 38px;
+  height: 38px;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 2px 8px var(--c-glow));
+}
+
+/* Upload Streaming Energy Streak (Ascending particles) */
+.uc-speed-streaks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.uc-speed-line {
+  position: absolute;
+  bottom: 15%;
+  width: 2px;
+  height: 14px;
+  background: linear-gradient(to top, transparent, var(--c), #ffffff);
+  border-radius: 999px;
+  opacity: 0;
+}
+
+/* Shockwave expansion on complete or drop */
+.uc-shockwave {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--c);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* GSAP Confetti Particles & Ribbon Streamers */
+.uc-burst {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.uc-burst .confetti-particle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  opacity: 0;
+  pointer-events: none;
+  transform-origin: center center;
+}
+
+.uc-burst .confetti-particle.circle {
+  border-radius: 50%;
+}
+
+.uc-burst .confetti-particle.ribbon {
+  border-radius: 2px;
+}
+
+.uc-burst .confetti-particle.diamond {
+  transform: rotate(45deg);
+}
+
+.uc-burst .confetti-particle.star {
+  clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+/* Headers & Meta Typography */
+.uc-header {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 12px;
+}
+
+.uc-title {
+  font-size: 17px;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0 0 5px;
+  color: var(--uc-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.uc-file-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 1px 6px;
+  font-size: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--c) 16%, transparent);
+  color: var(--c);
+  border: 1px solid color-mix(in srgb, var(--c) 30%, transparent);
+}
+
+.uc-subtitle {
+  margin: 0;
+  font-size: 13px;
+  color: var(--uc-muted);
+  line-height: 1.4;
+}
+
+/* Segmented Progress Track (20 segments) & Hi-Fi Equalizer */
+.uc-progress-section {
+  position: relative;
+  z-index: 2;
+  overflow: visible;
+  margin-top: 14px;
+}
+
+.uc-meta-telemetry {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  font-size: 12px;
+  color: var(--uc-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.uc-telemetry-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.uc-bytes-stat {
+  font-size: 12px;
+  color: var(--uc-muted);
+}
+
+.uc-speed-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  background: var(--uc-track);
+  color: var(--c);
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
+}
+
+.uc-speed-pill.live {
+  background: color-mix(in srgb, var(--c) 12%, transparent);
+  color: var(--c);
+  border-color: color-mix(in srgb, var(--c) 25%, transparent);
+}
+
+.uc-speed-pill.paused {
+  background: color-mix(in srgb, var(--uc-warn) 14%, transparent);
+  color: var(--uc-warn);
+  border-color: color-mix(in srgb, var(--uc-warn) 30%, transparent);
+}
+
+.uc-speed-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 6px var(--c);
+}
+
+.uc-speed-pill.live .uc-speed-dot {
+  animation: ucPulse 1.2s infinite ease-in-out;
+}
+
+.uc-speed-pill.paused .uc-speed-dot {
+  background: var(--uc-warn);
+  box-shadow: 0 0 6px var(--uc-warn);
+  animation: ucPausedDotBreathe 2s infinite ease-in-out;
+}
+
+@keyframes ucPausedDotBreathe {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
+.uc-telemetry-sep {
+  opacity: 0.45;
+  margin: 0 1px;
+}
+
+.uc-telemetry-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.uc-percent-text {
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--uc-text);
+}
+
+/* 20 Segments Track & Masked Shimmer Sweep */
+.segs-wrap {
+  position: relative;
+  padding: 10px 0 6px;
+  cursor: pointer;
+}
+
+.segs,
+.uc-segs {
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  gap: 3px;
+  height: 16px;
+  align-items: flex-end;
+  position: relative;
+}
+
+.segs i,
+.uc-seg {
+  position: relative;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--uc-track);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.35);
+  transition: background 0.25s ease, box-shadow 0.25s ease;
+  transform-origin: bottom center;
+}
+
+.segs i.on,
+.uc-seg.on {
+  background: linear-gradient(180deg, var(--uc-accent-light, #a79aff) 0%, var(--c) 100%);
+  box-shadow: 0 0 8px var(--c-glow), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+/* Audiovisual Equalizer wave ripple on active segments */
+.uc-card[data-status="uploading"] .segs i.on,
+.uc-card[data-status="uploading"] .uc-seg.on {
+  animation: ucEqualizerWave 1.4s ease-in-out infinite;
+  animation-delay: calc(var(--seg-i) * 0.055s);
+}
+
+@keyframes ucEqualizerWave {
+  0%, 100% {
+    transform: scaleY(1.22);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scaleY(1.48);
+    filter: brightness(1.25);
+  }
+}
+
+.uc-card[data-status="uploading"] .segs i.filling,
+.uc-card[data-status="uploading"] .uc-seg.filling {
+  background: color-mix(in srgb, var(--c) 80%, #ffffff);
+  box-shadow: 0 0 10px var(--c);
+  animation: ucFillingQuantum 0.65s ease-in-out infinite alternate;
+}
+
+@keyframes ucFillingQuantum {
+  0% {
+    transform: scaleY(1.15);
+    opacity: 0.75;
+    filter: brightness(1);
+  }
+  100% {
+    transform: scaleY(1.45);
+    opacity: 1;
+    filter: brightness(1.35);
+  }
+}
+
+/* Standby warm amber breathing wave when paused */
+.uc-card[data-status="paused"] .segs i.on,
+.uc-card[data-status="paused"] .uc-seg.on {
+  background: linear-gradient(180deg, #fcd34d 0%, var(--uc-warn) 100%);
+  box-shadow: 0 0 8px var(--uc-warn-glow), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  animation: ucPausedBreathe 2.6s ease-in-out infinite;
+  animation-delay: calc(var(--seg-i) * 0.05s);
+}
+
+@keyframes ucPausedBreathe {
+  0%, 100% {
+    transform: scaleY(1.25);
+    opacity: 1;
+    box-shadow: 0 0 8px var(--uc-warn-glow);
+  }
+  50% {
+    transform: scaleY(1.08);
+    opacity: 0.75;
+    box-shadow: 0 0 2px var(--uc-warn-glow);
+  }
+}
+
+/* Seamless Shimmer Mask across active segments */
+.shine-mask {
+  position: absolute;
+  top: 10px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(90deg, #000 calc(100% - 3px), transparent 0) 0 0 / calc((100% + 3px) / 20) 100% repeat-x;
+  mask: linear-gradient(90deg, #000 calc(100% - 3px), transparent 0) 0 0 / calc((100% + 3px) / 20) 100% repeat-x;
+  mix-blend-mode: plus-lighter;
+}
+
+.shine-clip {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+}
+
+.shine {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.75) 50%,
+      transparent 80%);
+}
+
+/* Floating Milestone Tooltip */
+.uc-seg-tooltip {
+  position: absolute;
+  top: -12px;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 600;
+  background: var(--uc-card);
+  color: var(--c);
+  border: 1px solid var(--c);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35), 0 0 8px var(--c-glow);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.uc-tooltip-sep {
+  opacity: 0.5;
+}
+
+/* Buttons and Action Triggers */
+.uc-actions {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 22px;
+  min-height: 42px;
+}
+
+.uc-btn {
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 550;
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--uc-card-border);
+  background: var(--uc-surface-glass);
+  color: var(--uc-text);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: border-color 0.2s, background 0.2s, color 0.2s, box-shadow 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.uc-btn:hover {
+  border-color: color-mix(in srgb, var(--c) 40%, var(--uc-card-border));
+  box-shadow: 0 4px 16px var(--c-glow);
+}
+
+.uc-btn.primary {
+  background: var(--c);
+  border-color: var(--c);
+  color: #0d0f14;
+  font-weight: 650;
+  box-shadow: 0 4px 16px var(--c-glow);
+}
+
+.uc-btn.primary:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 6px 20px var(--c-glow);
+}
+
+.uc-btn.ghost {
+  background: transparent;
+  border-color: transparent;
+  color: var(--uc-muted);
+  box-shadow: none;
+}
+
+.uc-btn.ghost:hover {
+  color: var(--uc-text);
+  background: color-mix(in srgb, var(--uc-text) 6%, transparent);
+}
+
+/* Sound / Mute Indicator Button (top right micro tool) */
+.uc-sound-toggle {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--uc-muted);
+  cursor: pointer;
+  transition: all 0.2s;
+  z-index: 5;
+}
+
+.uc-sound-toggle:hover {
+  color: var(--uc-text);
+  background: var(--uc-track);
+}
+
+@keyframes ucPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  50% {
+    opacity: 0.4;
+    transform: scale(0.85);
+  }
+}
+
+@keyframes ucShimmerWave {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(100%);
+  }
+}
