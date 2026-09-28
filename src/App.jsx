@@ -189,31 +189,10 @@ export default function App() {
           )}
 
           {/* Clean Page Footer */}
-          <footer className="mt-16 pt-8 border-t border-border/60 text-xs text-muted flex flex-col sm:flex-row items-center justify-between gap-4">
+          <footer className="mt-16 pt-8 border-t border-border/60 text-xs text-muted flex items-center justify-between gap-4">
             <div className="flex items-center gap-2">
               <span className="font-heading font-bold text-fg text-sm">FunUI</span>
               <span>— Copy & paste React + Tailwind primitives.</span>
-            </div>
-            <div className="flex items-center gap-4 text-xs font-mono">
-              <a
-                href="https://github.com/AzizReja10/funui"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-fg transition-colors"
-              >
-                GitHub
-              </a>
-              <span className="text-muted/40">•</span>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noreferrer"
-                className="hover:text-fg transition-colors"
-              >
-                Twitter
-              </a>
-              <span className="text-muted/40">•</span>
-              <span className="text-muted/60">MIT License</span>
             </div>
           </footer>
         </main>

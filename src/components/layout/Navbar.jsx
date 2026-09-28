@@ -19,7 +19,6 @@ export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, on
       },
     },
     { id: "install", label: "Installation", href: "/installation", action: () => onNavigate?.("installation") },
-    { id: "mcp", label: "MCP", badge: "WIP", action: () => alert("MCP skills and agent primitives coming soon!") },
   ];
 
   return (
@@ -78,29 +77,17 @@ export function Navbar({ isDark, onToggleTheme, onOpenMobileMenu, onNavigate, on
           </div>
         )}
 
-        {/* Right: Enclosed Mini Capsule Pill [Contrast | Sign in] */}
+        {/* Right: Theme Toggle & Mobile Menu */}
         <div className="flex items-center gap-2 shrink-0">
-          <div className="rounded-full border border-neutral-200 dark:border-neutral-700/80 bg-neutral-50/80 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 px-3 py-1 flex items-center gap-2.5 transition-colors cursor-pointer select-none">
-            <button
-              type="button"
-              onClick={onToggleTheme}
-              className="text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white transition-colors cursor-pointer flex items-center justify-center p-0.5"
-              aria-label="Toggle theme"
-              title={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            >
-              <Contrast size={14} className="transition-transform duration-300 hover:rotate-180" />
-            </button>
-
-            <span className="w-[1px] h-3.5 bg-neutral-200 dark:bg-neutral-700 shrink-0" />
-
-            <button
-              type="button"
-              onClick={() => alert("Welcome to FunUI! Sign in flow.")}
-              className="text-sm font-medium text-neutral-800 dark:text-neutral-200 hover:opacity-80 transition-opacity cursor-pointer whitespace-nowrap"
-            >
-              Sign in
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={onToggleTheme}
+            className="h-8 w-8 rounded-full border border-neutral-200 dark:border-neutral-800 bg-neutral-50/80 dark:bg-neutral-800/50 hover:bg-neutral-100 dark:hover:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:text-neutral-900 dark:hover:text-white transition-colors cursor-pointer flex items-center justify-center"
+            aria-label="Toggle theme"
+            title={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            <Contrast size={15} className="transition-transform duration-300 hover:rotate-180" />
+          </button>
 
           {/* Mobile menu icon (visible on narrow screens) */}
           {onOpenMobileMenu && (
