@@ -43,7 +43,7 @@ export function HeroColorPanelsDemo() {
   ];
 
   function handleCopy() {
-    navigator.clipboard.writeText("npx native-bloom add hero-color-panels");
+    navigator.clipboard.writeText("npx shadcn@latest init");
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   }
@@ -107,7 +107,7 @@ export function HeroColorPanelsDemo() {
               className="inline-flex items-center gap-2 h-10 sm:h-11 px-3.5 sm:px-4 text-xs font-mono rounded-lg border border-border bg-surface text-fg hover:bg-surface-hover hover:border-fg/30 transition-all cursor-pointer"
             >
               <Terminal size={14} className="text-muted" />
-              <span>npx bloom add hero</span>
+              <span>npx shadcn@latest init</span>
               {copied ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} className="text-muted" />}
             </button>
           </div>

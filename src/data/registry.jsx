@@ -23,7 +23,8 @@ export const registry = [
     badge: null,
     description: "Tactile buttons engineered with click micro-interactions, jello wobble physics, six color treatments, and multi-size variants.",
     tags: ["Button", "Interactive", "Jelly", "Click", "Trigger", "Tactile"],
-    installation: "npx funui add button",
+    installation: "npx shadcn@latest add button",
+    dependencies: ["clsx", "tailwind-merge"],
     demo: (
       <div className="flex flex-col items-center justify-center gap-6 p-4">
         <div className="flex flex-wrap items-center justify-center gap-3">
@@ -71,7 +72,8 @@ export default function ButtonDemo() {
     badge: "fun",
     description: "Tactile Jelly Button with plump 3D gelatin lighting, jello-horizontal wobble animation, permanent bite removal, and bursting 3D jelly droplets.",
     tags: ["Jelly", "Interactive", "BiteButton", "Gummy", "Wobble", "Fun"],
-    installation: "npx funui add bite-button",
+    installation: "components/ui/BiteButton.jsx",
+    dependencies: ["lucide-react", "canvas-confetti"],
     demo: (
       <div className="w-full flex flex-col items-center justify-center p-2">
         <BiteButton label="TASTE ME" kicker="JELLY GUMMY" />
@@ -106,7 +108,8 @@ export default function BiteButtonDemo() {
     badge: "new",
     description: "Skeuomorphic mechanical typewriter with interactive keyboard input, tactile keycap bevels, ribbon spools, hammer strike motion, spring-loaded carriage returns, bell flashes, and an ambient Three.js dust particle layer.",
     tags: ["Typewriter", "Interactive", "Keyboard", "Skeuomorphism", "Three.js", "Framer Motion", "Retro"],
-    installation: "npx funui add typewriter",
+    installation: "components/typewriter/Typewriter.jsx",
+    dependencies: ["framer-motion", "three", "lucide-react"],
     demo: (
       <div className="w-full flex flex-col items-center justify-center p-2">
         <Typewriter />
@@ -134,7 +137,8 @@ export default function TypewriterDemo() {
     badge: "new",
     description: "Minimalist multi-era Windows timeline slider featuring a simple Three.js 3D logo flip transition, rolling odometer numbers, flat reference ticks, and continuous real-time drag scrubbing with spring snap physics and keyboard accessibility.",
     tags: ["Timeline", "Slider", "Interactive", "Three.js", "Framer Motion", "Draggable", "Scrubber", "Windows", "Accessible"],
-    installation: "npx funui add windows-timeline",
+    installation: "components/ui/WindowsTimeline.jsx",
+    dependencies: ["framer-motion", "three", "lucide-react"],
     demo: <WindowsTimelineDemo />,
     code: `import { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -415,7 +419,8 @@ export default function WindowsTimeline({
     badge: null,
     description: "Accessible toggle switch with smooth animated thumb glide and focus ring indicators.",
     tags: ["Toggle", "Boolean", "Accessible"],
-    installation: "npx funui add switch",
+    installation: "npx shadcn@latest add switch",
+    dependencies: ["clsx", "tailwind-merge"],
     demo: (
       <div className="flex flex-col gap-4 p-4">
         <label className="flex items-center gap-3 cursor-pointer">
@@ -442,7 +447,8 @@ export default function WindowsTimeline({
     badge: null,
     description: "Compact status labels with electric lime, updated pink, cobalt blue, and subdued neutral weights.",
     tags: ["Status", "Label", "Pill", "Tag"],
-    installation: "npx funui add badge",
+    installation: "npx shadcn@latest add badge",
+    dependencies: ["clsx", "tailwind-merge"],
     demo: (
       <div className="flex flex-wrap items-center justify-center gap-2.5 p-4">
         <Badge variant="default">Default</Badge>
@@ -471,7 +477,8 @@ export default function WindowsTimeline({
     badge: null,
     description: "Structured surface with composed header, title, description, body, and footer slots.",
     tags: ["Surface", "Container", "Layout"],
-    installation: "npx funui add card",
+    installation: "npx shadcn@latest add card",
+    dependencies: ["clsx", "tailwind-merge"],
     demo: (
       <div className="w-full max-w-md p-2">
         <Card hover>
@@ -520,7 +527,8 @@ export default function WindowsTimeline({
     badge: null,
     description: "Form inputs with leading icon slot, keyboard accessibility, and refined focus rings.",
     tags: ["Form", "Text Input", "Accessible", "Icons"],
-    installation: "npx funui add input",
+    installation: "npx shadcn@latest add input",
+    dependencies: ["clsx", "tailwind-merge", "lucide-react"],
     demo: (
       <div className="w-full max-w-sm flex flex-col gap-3 p-4">
         <Input icon={Search} placeholder="Search components, primitives, blocks..." />
@@ -544,7 +552,8 @@ export default function WindowsTimeline({
     badge: "new",
     description: "High-contrast analytics display with background neon ambient glow, trend indicators, and sparklines.",
     tags: ["Analytics", "Sparkline", "Glassmorphism", "Metrics"],
-    installation: "npx funui add glass-metric",
+    installation: "components/ui/GlassMetricCard.jsx",
+    dependencies: ["clsx", "tailwind-merge", "lucide-react"],
     demo: <GlassMetricCardDemo />,
     code: `import { Badge } from "@/components/ui/Badge";
 
@@ -573,7 +582,8 @@ export function MetricCard({ title, value, change, target }) {
     badge: "updated",
     description: "Multi-slot asynchronous telemetry grid with real-time progress bars, stat tickers, and neon highlights.",
     tags: ["Bento", "Layout", "Dashboard", "Stats"],
-    installation: "npx funui add bento-grid",
+    installation: "components/ui/BentoGrid.jsx",
+    dependencies: ["lucide-react", "framer-motion"],
     demo: <BentoShowcaseDemo />,
     code: `import { Badge } from "@/components/ui/Badge";
 import { Zap, ShieldCheck, Activity } from "lucide-react";
@@ -605,7 +615,8 @@ export function BentoGrid() {
     badge: "new",
     description: "Split-layout hero section with responsive ColorPanels shader visuals, CTA content, and tech stack badges.",
     tags: ["Hero", "Split Layout", "3D Shader", "AI SDK", "Interactive"],
-    installation: "npx funui add hero-color-panels",
+    installation: "components/ui/HeroColorPanels.jsx",
+    dependencies: ["lucide-react", "framer-motion"],
     demo: <HeroColorPanelsDemo />,
     code: `import { Button } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
@@ -668,7 +679,8 @@ export function HeroColorPanels() {
     badge: "new",
     description: "Photorealistic 3D satellite Earth globe rendered with high-resolution NASA Blue Marble imagery, topographic normal relief, specular ocean reflections, drifting cloud deck, cinematic deep-space fly-in zoom, and interactive hub targeting.",
     tags: ["Globe", "3D", "Three.js", "Earth", "Satellite", "NASA", "Zoom", "OrbitControls", "PBR"],
-    installation: "npx funui add realistic-globe",
+    installation: "components/ui/RealisticGlobe.jsx",
+    dependencies: ["three", "lucide-react"],
     demo: <RealisticGlobeDemo />,
     code: `'use client';
 import { useEffect, useRef } from 'react';
@@ -924,7 +936,8 @@ export function GlobeDemo() {
     badge: "Creative",
     description: "Creative, lightweight Three.js fluid morphing sculpture with procedural harmonic waves, spring jello squish physics, mouse tilt, and 5 PBR material treatments with 0 KB texture assets.",
     tags: ["Three.js", "3D", "Liquid", "Orb", "Creative", "PBR", "Chrome", "Interactive", "Harmonic"],
-    installation: "npx funui add liquid-orb",
+    installation: "components/ui/LiquidOrb.jsx",
+    dependencies: ["three"],
     demo: <LiquidOrbDemo />,
     code: `import { useEffect, useRef } from "react";
 import * as THREE from "three";

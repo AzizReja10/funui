@@ -35,7 +35,7 @@ export function SearchModal({ isOpen, onClose, items, onSelect }) {
 
   const allItems = [
     { slug: "home", name: "Home", category: "Getting Started", description: "FunUI overview, philosophy, and interactive primitives.", tags: ["home", "overview", "intro"] },
-    { slug: "installation", name: "Installation Guide", category: "Getting Started", description: "Vite, Next.js, and manual Tailwind setup walkthrough.", tags: ["install", "guide", "setup", "tailwind", "vite", "next"] },
+    { slug: "installation", name: "Installation Guide", category: "Getting Started", description: "shadcn/ui, Next.js, Vite, and existing project setup walkthrough.", tags: ["install", "guide", "setup", "shadcn", "tailwind", "vite", "next"] },
     ...items,
   ];
 

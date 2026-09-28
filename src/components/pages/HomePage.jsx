@@ -9,7 +9,7 @@ export function HomePage({ onNavigate }) {
   const [demoSwitch, setDemoSwitch] = useState(true);
 
   function handleCopyCli() {
-    navigator.clipboard.writeText("npx funui init");
+    navigator.clipboard.writeText("npx shadcn@latest init");
     setCopiedCli(true);
     setTimeout(() => setCopiedCli(false), 2000);
   }
@@ -34,7 +34,7 @@ export function HomePage({ onNavigate }) {
         </h1>
 
         <p className="text-base sm:text-lg text-muted max-w-2xl leading-relaxed">
-          A curated collection of accessible, tactile React + Tailwind CSS primitives. No heavy npm package lock-in — just copy the code into your project, customize freely, and ship.
+          A curated collection of accessible, tactile React + Tailwind CSS primitives built for shadcn/ui. No heavy npm package lock-in — just copy the code into your project, customize freely, and ship.
         </p>
 
         {/* CTA Buttons */}
@@ -63,7 +63,7 @@ export function HomePage({ onNavigate }) {
             className="inline-flex items-center gap-2.5 h-11 px-4 text-xs font-mono rounded-lg border border-border bg-surface hover:bg-surface-hover text-fg transition-all cursor-pointer shadow-2xs"
           >
             <Terminal size={14} className="text-muted" />
-            <span>npx funui init</span>
+            <span>npx shadcn@latest init</span>
             {copiedCli ? <Check size={14} className="text-emerald-500" /> : <Copy size={14} className="text-muted" />}
           </button>
         </div>

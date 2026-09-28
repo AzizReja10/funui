@@ -22,6 +22,21 @@ export function ComponentDemo({ item, onPrev, onNext, hasPrev, hasNext, onNaviga
   const [viewport, setViewport] = useState("desktop"); // 'desktop' | 'tablet' | 'mobile'
   const [copiedPage, setCopiedPage] = useState(false);
   const [copiedInstall, setCopiedInstall] = useState(false);
+  const [installPm, setInstallPm] = useState("pnpm"); // 'pnpm' | 'npm' | 'bun'
+
+  const isShadcnCli = item.installation?.startsWith("npx shadcn");
+  const deps = item.dependencies?.length ? item.dependencies.join(" ") : "clsx tailwind-merge lucide-react";
+
+  const getCliCommand = () => {
+    if (isShadcnCli) {
+      if (installPm === "pnpm") return `pnpm dlx shadcn@latest add ${item.slug}`;
+      if (installPm === "bun") return `bunx --bun shadcn@latest add ${item.slug}`;
+      return `npx shadcn@latest add ${item.slug}`;
+    }
+    if (installPm === "pnpm") return `pnpm add ${deps}`;
+    if (installPm === "bun") return `bun add ${deps}`;
+    return `npm install ${deps}`;
+  };
 
   async function handleCopyPage() {
     await navigator.clipboard.writeText(item.code);
@@ -30,7 +45,7 @@ export function ComponentDemo({ item, onPrev, onNext, hasPrev, hasNext, onNaviga
   }
 
   async function handleCopyInstall() {
-    await navigator.clipboard.writeText(item.installation || `npx funui add ${item.slug}`);
+    await navigator.clipboard.writeText(getCliCommand());
     setCopiedInstall(true);
     setTimeout(() => setCopiedInstall(false), 2000);
   }
@@ -225,33 +240,118 @@ export function ComponentDemo({ item, onPrev, onNext, hasPrev, hasNext, onNaviga
 
             {/* Quick Installation Section */}
             <div id="installation" className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span className="font-heading text-sm font-bold uppercase tracking-wider text-fg">
-                  Installation
-                </span>
-              </div>
-              <div className="flex items-center justify-between rounded-xl border border-border bg-surface px-4 py-3 font-mono text-xs text-fg">
-                <div className="flex items-center gap-2.5 truncate">
-                  <Terminal size={14} className="text-neon-lime shrink-0" />
-                  <span className="truncate">{item.installation || `bunx forma-ui add ${item.slug}`}</span>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="font-heading text-sm font-bold uppercase tracking-wider text-fg">
+                    Installation
+                  </span>
+                  <span className="text-[11px] font-mono text-muted bg-surface px-2 py-0.5 rounded border border-border">
+                    shadcn/ui compatible
+                  </span>
                 </div>
-                <button
-                  onClick={handleCopyInstall}
-                  className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-fg transition-colors shrink-0 ml-3"
-                >
-                  {copiedInstall ? (
-                    <>
-                      <Check size={13} className="text-emerald-500" />
-                      <span className="text-emerald-500">Copied</span>
-                    </>
-                  ) : (
-                    <>
-                      <Copy size={13} />
-                      <span>Copy</span>
-                    </>
-                  )}
-                </button>
+
+                {/* Package Manager Selector */}
+                <div className="flex items-center gap-1 p-0.5 rounded-lg bg-surface border border-border text-[11px] font-mono">
+                  {["pnpm", "npm", "bun"].map((pm) => (
+                    <button
+                      key={pm}
+                      onClick={() => setInstallPm(pm)}
+                      className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+                        installPm === pm
+                          ? "bg-bg text-fg font-semibold shadow-2xs border border-border/60"
+                          : "text-muted hover:text-fg"
+                      }`}
+                    >
+                      {pm}
+                    </button>
+                  ))}
+                </div>
               </div>
+
+              {isShadcnCli ? (
+                /* Standard shadcn CLI primitive */
+                <div className="flex items-center justify-between rounded-xl border border-border bg-surface px-4 py-3 font-mono text-xs text-fg">
+                  <div className="flex items-center gap-2.5 truncate">
+                    <Terminal size={14} className="text-neon-lime shrink-0" />
+                    <span className="truncate">{getCliCommand()}</span>
+                  </div>
+                  <button
+                    onClick={handleCopyInstall}
+                    className="inline-flex items-center gap-1.5 text-xs text-muted hover:text-fg transition-colors shrink-0 ml-3 cursor-pointer"
+                  >
+                    {copiedInstall ? (
+                      <>
+                        <Check size={13} className="text-emerald-500" />
+                        <span className="text-emerald-500">Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={13} />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              ) : (
+                /* Extended / creative component */
+                <div className="space-y-2.5 rounded-xl border border-border bg-surface/50 p-3.5">
+                  <div className="text-xs text-muted flex items-center justify-between">
+                    <span>Step 1: Install required peer dependencies</span>
+                    <button
+                      onClick={handleCopyInstall}
+                      className="inline-flex items-center gap-1 text-[11px] font-mono text-muted hover:text-fg cursor-pointer transition-colors"
+                    >
+                      {copiedInstall ? (
+                        <>
+                          <Check size={12} className="text-emerald-500" />
+                          <span className="text-emerald-500">Copied</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={12} />
+                          <span>Copy command</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <div className="flex items-center justify-between rounded-lg border border-border bg-bg px-3.5 py-2.5 font-mono text-xs text-fg">
+                    <div className="flex items-center gap-2 truncate">
+                      <Terminal size={13} className="text-neon-lime shrink-0" />
+                      <span className="truncate">{getCliCommand()}</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 text-xs text-muted">
+                    <div className="flex items-center gap-2 truncate">
+                      <span>Step 2: Copy source to</span>
+                      <code className="text-fg font-mono bg-bg px-1.5 py-0.5 rounded border border-border truncate">
+                        src/{item.installation || `components/ui/${item.name.replace(/\s+/g, '')}.jsx`}
+                      </code>
+                    </div>
+                    <button
+                      onClick={() => setTab("code")}
+                      className="text-xs font-medium text-neon-lime hover:underline shrink-0 text-left cursor-pointer"
+                    >
+                      View & Copy Source →
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <p className="text-[11px] text-muted flex items-center justify-between">
+                <span>Not a custom npm package. Primitives are added directly to your codebase.</span>
+                <a
+                  href="/installation"
+                  onClick={(e) => {
+                    if (onNavigate) {
+                      e.preventDefault();
+                      onNavigate("installation");
+                    }
+                  }}
+                  className="text-muted hover:text-fg underline transition-colors"
+                >
+                  Setup Guide →
+                </a>
+              </p>
             </div>
 
             {/* Usage Code Snippet */}
