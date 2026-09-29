@@ -10,6 +10,39 @@ const springTransition = {
   mass: 0.8,
 };
 
+const SLIDE_THEMES = [
+  {
+    // Mountain Peaks - Sky blue to alpine indigo
+    gradient: "linear-gradient(90deg, #0284c7, #38bdf8, #818cf8)",
+    glow: "rgba(56, 189, 248, 0.65)",
+    color: "#38bdf8",
+  },
+  {
+    // Forest Canopy - Emerald green to fresh mint
+    gradient: "linear-gradient(90deg, #059669, #10b981, #34d399)",
+    glow: "rgba(52, 211, 153, 0.65)",
+    color: "#10b981",
+  },
+  {
+    // Desert Dunes - Warm amber to golden sunrise
+    gradient: "linear-gradient(90deg, #d97706, #f59e0b, #fbbf24)",
+    glow: "rgba(251, 191, 36, 0.65)",
+    color: "#f59e0b",
+  },
+  {
+    // Ocean Coastline - Azure to cyan ocean
+    gradient: "linear-gradient(90deg, #0284c7, #06b6d4, #22d3ee)",
+    glow: "rgba(34, 211, 238, 0.65)",
+    color: "#06b6d4",
+  },
+  {
+    // Aurora Skies - Electric purple to neon violet
+    gradient: "linear-gradient(90deg, #7c3aed, #a855f7, #c084fc)",
+    glow: "rgba(168, 85, 247, 0.65)",
+    color: "#a855f7",
+  },
+];
+
 export const Carousel = ({
   items = [],
   initialIndex = 0,
@@ -29,6 +62,15 @@ export const Carousel = ({
   const containerRef = useRef(null);
 
   const total = items.length;
+
+  const currentItem = items[currentIndex] || {};
+  const currentTheme = currentItem.accentColor
+    ? {
+        gradient: `linear-gradient(90deg, ${currentItem.accentColor}, ${currentItem.accentColor}cc)`,
+        glow: `${currentItem.accentColor}80`,
+        color: currentItem.accentColor,
+      }
+    : SLIDE_THEMES[currentIndex % SLIDE_THEMES.length];
 
   const goToSlide = useCallback(
     (index) => {
@@ -271,6 +313,9 @@ export const Carousel = ({
                   <motion.div
                     layoutId="carouselActiveDot"
                     className="carousel__dot carousel__dot--active"
+                    style={{
+                      boxShadow: `0 0 8px ${currentTheme.glow}`,
+                    }}
                     transition={{
                       type: "spring",
                       stiffness: 450,
@@ -302,6 +347,8 @@ export const Carousel = ({
             style={{
               animationDuration: `${interval}ms`,
               animationPlayState: isPaused || isDragging ? "paused" : "running",
+              background: currentTheme.gradient,
+              boxShadow: `0 0 10px ${currentTheme.glow}`,
             }}
           />
         </div>
