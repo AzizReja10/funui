@@ -18,6 +18,41 @@ import { UploadCard } from "../components/ui/UploadCard";
 import { UploadCardDemo } from "../components/showcase/UploadCardDemo";
 import { SeasonalCalendar } from "../components/ui/SeasonalCalendar";
 import seasonalCalendarSource from "../components/ui/SeasonalCalendar.jsx?raw";
+import Carousel from "../components/ui/Carousel";
+import carouselSource from "../components/ui/Carousel.jsx?raw";
+
+const carouselItems = [
+  {
+    id: 1,
+    title: "Mountain Peaks",
+    description: "Snow-capped summits reaching into the twilight sky.",
+    image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    id: 2,
+    title: "Forest Canopy",
+    description: "Sunlight filtering through ancient emerald redwoods.",
+    image: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    id: 3,
+    title: "Desert Dunes",
+    description: "Golden sand ridges carved by desert winds.",
+    image: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    id: 4,
+    title: "Ocean Coastline",
+    description: "Waves gently crashing onto serene rocky shores.",
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
+  },
+  {
+    id: 5,
+    title: "Aurora Skies",
+    description: "Vibrant polar auroras dancing across frozen northern fjords.",
+    image: "https://images.unsplash.com/photo-1517411032315-54ef2cb783bb?auto=format&fit=crop&w=1200&q=80",
+  },
+];
 
 export const registry = [
   {
@@ -127,6 +162,31 @@ export default function BiteButtonDemo() {
       { name: "initialDate", type: "Date", default: "new Date()", description: "Initial date to display in the calendar view" },
       { name: "weekStartsOn", type: "0 | 1 | 2 | 3 | 4 | 5 | 6", default: "0", description: "Day of the week to start on (0 for Sunday, 1 for Monday, etc.)" },
       { name: "onSelect", type: "(date: Date) => void", default: "undefined", description: "Callback triggered when a calendar date cell is clicked or selected" },
+    ],
+  },
+  {
+    slug: "carousel",
+    name: "Carousel",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "Clean, physics-driven 3D coverflow carousel built with Framer Motion. Features spring-based gestural dragging, smooth perspective rotation, animated active pill indicator, auto-play with progress bar, and keyboard navigation.",
+    tags: ["Carousel", "Slider", "Framer Motion", "Spring", "3D", "Coverflow", "Gestures", "Touch", "Micro-Interactions"],
+    installation: "components/ui/Carousel.jsx",
+    dependencies: ["framer-motion", "lucide-react"],
+    demo: (
+      <div className="w-full flex flex-col items-center justify-center p-2 sm:p-4">
+        <Carousel items={carouselItems} initialIndex={1} />
+      </div>
+    ),
+    code: carouselSource,
+    props: [
+      { name: "items", type: "Array<{ id, title, description, image, badge? }>", default: "required", description: "Array of slide items to render" },
+      { name: "initialIndex", type: "number", default: "0", description: "Initial active slide index" },
+      { name: "autoPlay", type: "boolean", default: "true", description: "Enables automatic slide cycling" },
+      { name: "interval", type: "number", default: "5000", description: "Interval timing between automatic slides in milliseconds" },
+      { name: "showControls", type: "boolean", default: "true", description: "Show left/right navigation arrow buttons" },
+      { name: "showIndicators", type: "boolean", default: "true", description: "Show bottom capsule pill indicators" },
+      { name: "showProgress", type: "boolean", default: "true", description: "Show autoplay progress bar" },
     ],
   },
   {
