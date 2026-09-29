@@ -189,12 +189,10 @@ export const Carousel = ({
                         <span className="carousel__badge">{item.badge}</span>
                       )}
                       <h2 className="carousel__title">{item.title}</h2>
-                      <p className="carousel__description">{item.description}</p>
                     </motion.div>
                   ) : (
                     <div className="carousel__overlay-content carousel__overlay-content--inactive">
                       <h2 className="carousel__title">{item.title}</h2>
-                      <p className="carousel__description">{item.description}</p>
                     </div>
                   )}
                 </AnimatePresence>

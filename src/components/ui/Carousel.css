@@ -79,12 +79,13 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 48px 26px 24px;
-  background: linear-gradient(to top,
-      rgba(5, 8, 15, 0.96) 0%,
-      rgba(5, 8, 15, 0.72) 45%,
-      rgba(5, 8, 15, 0.2) 75%,
-      transparent 100%);
+  padding: 38px 24px 20px;
+  background: linear-gradient(
+    to top,
+    rgba(5, 8, 15, 0.92) 0%,
+    rgba(5, 8, 15, 0.55) 50%,
+    transparent 100%
+  );
   color: #ffffff;
   display: flex;
   flex-direction: column;
