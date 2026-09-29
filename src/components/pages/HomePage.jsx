@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Sparkles, Terminal, Copy, Check, Shield, Zap, Layers, ArrowUpRight, Globe } from "lucide-react";
+import { ArrowRight, Sparkles, Terminal, Copy, Check, Shield, Zap, Layers, ArrowUpRight, Globe, Calendar } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
 import { Switch } from "../ui/Switch";
@@ -282,6 +282,38 @@ export function HomePage({ onNavigate }) {
               </div>
             </div>
             <p className="text-xs text-muted mt-2">Lightweight procedural fluid sculpture with organic harmonic ripples, spring squish physics, mouse tilt, and 5 PBR materials.</p>
+          </div>
+
+          {/* Card 8: Seasonal Calendar */}
+          <div
+            onClick={() => onNavigate("seasonal-calendar")}
+            className="rounded-2xl border border-border bg-bg p-6 hover:border-fg/30 transition-all cursor-pointer group shadow-2xs"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-mono font-medium text-muted uppercase">08 / Seasonal Calendar</span>
+              <div className="flex items-center gap-2">
+                <Badge variant="lime" size="xs">New</Badge>
+                <span className="text-xs font-medium text-muted group-hover:text-fg flex items-center gap-1 transition-colors">
+                  Inspect <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </div>
+            </div>
+            <div className="py-2 flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-sky-400 via-pink-400 to-amber-400 flex items-center justify-center text-white text-xs shadow-md shadow-pink-500/20">
+                  <Calendar size={14} className="text-white" />
+                </div>
+                <div>
+                  <span className="text-xs font-semibold text-fg">Atmospheric Seasonal Calendar</span>
+                  <div className="text-[10px] font-mono text-muted">4 Seasons • Procedural Particles • 3D Month Flip</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-pink-500/10 text-pink-600 dark:text-pink-400 border border-pink-500/20">Framer Motion</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20">Dynamic Sky</span>
+              </div>
+            </div>
+            <p className="text-xs text-muted mt-2">Atmospheric calendar with season-specific colorways, drifting particles (snow, petals, autumn leaves), 3D flip page physics, and rolling hill silhouettes.</p>
           </div>
         </div>
       </section>

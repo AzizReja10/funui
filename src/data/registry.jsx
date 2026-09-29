@@ -16,6 +16,8 @@ import { RealisticGlobeDemo } from "../components/showcase/RealisticGlobeDemo";
 import { LiquidOrbDemo } from "../components/showcase/LiquidOrbDemo";
 import { UploadCard } from "../components/ui/UploadCard";
 import { UploadCardDemo } from "../components/showcase/UploadCardDemo";
+import { SeasonalCalendar } from "../components/ui/SeasonalCalendar";
+import seasonalCalendarSource from "../components/ui/SeasonalCalendar.jsx?raw";
 
 export const registry = [
   {
@@ -101,6 +103,30 @@ export default function BiteButtonDemo() {
       { name: "onBite", type: "(biteCount: number) => void", default: "undefined", description: "Callback triggered on each bite click" },
       { name: "onReset", type: "() => void", default: "undefined", description: "Callback triggered on 360° spin reset" },
       { name: "className", type: "string", default: "undefined", description: "Additional classes for container styling" },
+    ],
+  },
+  {
+    slug: "seasonal-calendar",
+    name: "Seasonal Calendar",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "Atmospheric seasonal calendar component featuring season-specific celestial color palettes, dynamic procedural particles (snow, petals, autumn leaves, heat shimmers), rolling hill horizon silhouettes, 3D month-flip transitions, and poetic seasonal epigraphs.",
+    tags: ["Calendar", "Seasonal", "Framer Motion", "Interactive", "DatePicker", "Animation", "Micro-Interactions"],
+    installation: "components/ui/SeasonalCalendar.jsx",
+    dependencies: ["framer-motion"],
+    demo: (
+      <div className="w-full flex flex-col items-center justify-center p-2 sm:p-4">
+        <SeasonalCalendar
+          weekStartsOn={0}
+          onSelect={(date) => console.log("Selected date:", date)}
+        />
+      </div>
+    ),
+    code: seasonalCalendarSource,
+    props: [
+      { name: "initialDate", type: "Date", default: "new Date()", description: "Initial date to display in the calendar view" },
+      { name: "weekStartsOn", type: "0 | 1 | 2 | 3 | 4 | 5 | 6", default: "0", description: "Day of the week to start on (0 for Sunday, 1 for Monday, etc.)" },
+      { name: "onSelect", type: "(date: Date) => void", default: "undefined", description: "Callback triggered when a calendar date cell is clicked or selected" },
     ],
   },
   {
