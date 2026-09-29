@@ -80,13 +80,11 @@
   left: 0;
   right: 0;
   padding: 48px 26px 24px;
-  background: linear-gradient(
-    to top,
-    rgba(5, 8, 15, 0.96) 0%,
-    rgba(5, 8, 15, 0.72) 45%,
-    rgba(5, 8, 15, 0.2) 75%,
-    transparent 100%
-  );
+  background: linear-gradient(to top,
+      rgba(5, 8, 15, 0.96) 0%,
+      rgba(5, 8, 15, 0.72) 45%,
+      rgba(5, 8, 15, 0.2) 75%,
+      transparent 100%);
   color: #ffffff;
   display: flex;
   flex-direction: column;
@@ -152,11 +150,11 @@
 /* Floating Navigation Chevrons */
 .carousel__nav {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  top: calc(50% - 22px);
   width: 44px;
   height: 44px;
   border-radius: 50%;
+  transform-origin: center center;
   background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
@@ -255,6 +253,7 @@
   from {
     transform: scaleX(0);
   }
+
   to {
     transform: scaleX(1);
   }
@@ -289,6 +288,7 @@
   }
 
   .carousel__nav {
+    top: calc(50% - 18px);
     width: 36px;
     height: 36px;
   }

@@ -84,9 +84,8 @@ export const Carousel = ({
   return (
     <div
       ref={containerRef}
-      className={`carousel ${isDragging ? "carousel--dragging" : ""} ${
-        isPaused ? "carousel--paused" : ""
-      } ${className}`}
+      className={`carousel ${isDragging ? "carousel--dragging" : ""} ${isPaused ? "carousel--paused" : ""
+        } ${className}`}
       tabIndex={0}
       role="region"
       aria-roledescription="carousel"
@@ -138,9 +137,8 @@ export const Carousel = ({
           return (
             <motion.div
               key={item.id ?? index}
-              className={`carousel__slide ${
-                isActive ? "carousel__slide--active" : "carousel__slide--inactive"
-              }`}
+              className={`carousel__slide ${isActive ? "carousel__slide--active" : "carousel__slide--inactive"
+                }`}
               style={{
                 zIndex,
                 pointerEvents: isVisible ? "auto" : "none",
@@ -158,9 +156,9 @@ export const Carousel = ({
               whileHover={
                 !isActive && isVisible
                   ? {
-                      scale: scale * 1.03,
-                      filter: "brightness(0.85) contrast(1)",
-                    }
+                    scale: scale * 1.03,
+                    filter: "brightness(0.85) contrast(1)",
+                  }
                   : undefined
               }
               transition={springTransition}
@@ -212,6 +210,7 @@ export const Carousel = ({
           <motion.button
             type="button"
             className="carousel__nav carousel__nav--prev"
+            style={{ transformOrigin: "center center" }}
             onClick={(e) => {
               e.stopPropagation();
               prevSlide();
@@ -230,6 +229,7 @@ export const Carousel = ({
           <motion.button
             type="button"
             className="carousel__nav carousel__nav--next"
+            style={{ transformOrigin: "center center" }}
             onClick={(e) => {
               e.stopPropagation();
               nextSlide();
