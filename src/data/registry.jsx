@@ -20,6 +20,8 @@ import { SeasonalCalendar } from "../components/ui/SeasonalCalendar";
 import seasonalCalendarSource from "../components/ui/SeasonalCalendar.jsx?raw";
 import Carousel from "../components/ui/Carousel";
 import carouselSource from "../components/ui/Carousel.jsx?raw";
+import { PulseProgressDemo } from "../components/showcase/PulseProgressDemo";
+import pulseProgressSource from "../components/ui/PulseProgress.jsx?raw";
 
 const carouselItems = [
   {
@@ -187,6 +189,24 @@ export default function BiteButtonDemo() {
       { name: "showControls", type: "boolean", default: "true", description: "Show left/right navigation arrow buttons" },
       { name: "showIndicators", type: "boolean", default: "true", description: "Show bottom capsule pill indicators" },
       { name: "showProgress", type: "boolean", default: "true", description: "Show autoplay progress bar" },
+    ],
+  },
+  {
+    slug: "pulse-progress",
+    name: "Pulse Progress",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "Fluid harmonic progress indicator featuring real-time sine wave motion, ECG heartbeat pulse spike when paused, rolling odometer counter numbers, and circular play/pause ring control.",
+    tags: ["PulseProgress", "Progress", "ECG", "Wave", "Animation", "Heartbeat", "Micro-Interactions", "Counter", "Indicator"],
+    installation: "components/ui/PulseProgress.jsx",
+    dependencies: [],
+    demo: <PulseProgressDemo />,
+    code: pulseProgressSource,
+    props: [
+      { name: "value", type: "number (0-100)", default: "undefined", description: "Controlled progress value (0-100). If omitted, the component simulates progress autonomously." },
+      { name: "paused", type: "boolean", default: "false", description: "Controlled paused state" },
+      { name: "onPausedChange", type: "(nextPaused: boolean) => void", default: "undefined", description: "Callback triggered when play/pause state changes" },
+      { name: "onComplete", type: "() => void", default: "undefined", description: "Callback triggered once when progress reaches 100%" },
     ],
   },
   {

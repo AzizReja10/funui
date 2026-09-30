@@ -1,0 +1,239 @@
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;500;600&display=swap");
+
+@property --pp-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #87c38f;
+}
+
+@property --pp-fill {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #6fb079;
+}
+
+@property --pp-ink {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #10301a;
+}
+
+.pp {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  container-type: size;
+  --pp-bg: #87c38f;
+  --pp-fill: #6fb079;
+  --pp-ink: #10301a;
+  background: var(--pp-bg);
+  color: var(--pp-ink);
+  font-family: "Sora", system-ui, -apple-system, "Segoe UI", sans-serif;
+  transition:
+    --pp-bg 1s cubic-bezier(0.65, 0, 0.35, 1),
+    --pp-fill 1s cubic-bezier(0.65, 0, 0.35, 1),
+    --pp-ink 1s cubic-bezier(0.65, 0, 0.35, 1);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.pp[data-s="pause"] {
+  --pp-bg: #ef476f;
+  --pp-fill: #d81159;
+  --pp-ink: #ffffff;
+}
+
+/* fill + line */
+.pp-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: var(--pp-fill);
+  will-change: width;
+}
+
+.pp-wire {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.pp-wire path {
+  fill: none;
+  stroke: var(--pp-ink);
+  stroke-width: 8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* percentage */
+.pp-pct {
+  position: absolute;
+  left: 50%;
+  top: 29%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  font-size: clamp(54px, 10cqw, 104px);
+  line-height: 1;
+  height: 1em;
+  font-variant-numeric: tabular-nums;
+}
+
+.pp-col {
+  height: 1em;
+  overflow: hidden;
+}
+
+.pp-roll {
+  display: flex;
+  flex-direction: column;
+  will-change: transform;
+}
+
+.pp-roll span {
+  display: block;
+  height: 1em;
+  width: 0.62em;
+  text-align: center;
+}
+
+.pp-col.pp-h {
+  max-width: 0.62em;
+  transition: max-width 0.6s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.6s;
+}
+
+.pp-col.pp-h.pp-off {
+  max-width: 0;
+  opacity: 0;
+}
+
+.pp-sign {
+  font-size: 0.42em;
+  font-weight: 300;
+  opacity: 0.6;
+  margin-left: 0.15em;
+  margin-top: 0.25em;
+  align-self: flex-start;
+}
+
+/* button */
+.pp-btn {
+  position: absolute;
+  left: 50%;
+  top: 70%;
+  width: 84px;
+  height: 84px;
+  transform: translate(-50%, -50%);
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--pp-ink);
+  border-radius: 50%;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+.pp-btn:hover {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.pp-btn:active {
+  transform: translate(-50%, -50%) scale(0.94);
+}
+
+.pp-btn:focus-visible {
+  box-shadow: 0 0 0 3px var(--pp-ink);
+}
+
+.pp-btn>svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pp-ring-track {
+  fill: none;
+  stroke: var(--pp-ink);
+  opacity: 0.22;
+  stroke-width: 4;
+}
+
+.pp-ring-bar {
+  fill: none;
+  stroke: var(--pp-ink);
+  stroke-width: 4;
+  stroke-linecap: round;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+.pp-icon {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  transition: transform 0.6s cubic-bezier(0.65, 0, 0.35, 1), opacity 0.4s;
+}
+
+.pp-icon svg {
+  width: 30px;
+  height: 30px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Running state: show Play icon (▶) */
+.pp-play {
+  transform: none;
+  opacity: 1;
+}
+.pp-pause {
+  transform: rotate(-180deg) scale(0.4);
+  opacity: 0;
+}
+.pp-reload {
+  transform: rotate(-180deg) scale(0.4);
+  opacity: 0;
+}
+
+/* Paused state: show Pause icon (❚❚) */
+.pp[data-s="pause"] .pp-play {
+  transform: rotate(180deg) scale(0.4);
+  opacity: 0;
+}
+.pp[data-s="pause"] .pp-pause {
+  transform: none;
+  opacity: 1;
+}
+.pp[data-s="pause"] .pp-reload {
+  transform: rotate(-180deg) scale(0.4);
+  opacity: 0;
+}
+
+/* Completed state: show Reload icon (⟳) */
+.pp[data-s="done"] .pp-play {
+  transform: rotate(180deg) scale(0.4);
+  opacity: 0;
+}
+.pp[data-s="done"] .pp-pause {
+  transform: rotate(180deg) scale(0.4);
+  opacity: 0;
+}
+.pp[data-s="done"] .pp-reload {
+  transform: none;
+  opacity: 1;
+}
