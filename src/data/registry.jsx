@@ -22,6 +22,8 @@ import Carousel from "../components/ui/Carousel";
 import carouselSource from "../components/ui/Carousel.jsx?raw";
 import { PulseProgressDemo } from "../components/showcase/PulseProgressDemo";
 import pulseProgressSource from "../components/ui/PulseProgress.jsx?raw";
+import TempCard from "../components/ui/TempCard";
+import tempCardSource from "../components/ui/TempCard.jsx?raw";
 
 const carouselItems = [
   {
@@ -208,6 +210,23 @@ export default function BiteButtonDemo() {
       { name: "onPausedChange", type: "(nextPaused: boolean) => void", default: "undefined", description: "Callback triggered when play/pause state changes" },
       { name: "onComplete", type: "() => void", default: "undefined", description: "Callback triggered once when progress reaches 100%" },
     ],
+  },
+  {
+    slug: "temp-card",
+    name: "Temp Card",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "Atmospheric dark glass temperature card where real-time liquid rises with temperature, glowing dial ticks track the degrees, and colors shift dynamically between cold and hot hues.",
+    tags: ["TempCard", "Weather", "Temperature", "Liquid", "Glassmorphism", "Dial", "Micro-Interactions", "Animation"],
+    installation: "components/ui/TempCard.jsx",
+    dependencies: [],
+    demo: (
+      <div className="w-full flex items-center justify-center p-8 bg-[#e9e8e4] dark:bg-[#111216] rounded-2xl min-h-[420px] transition-colors">
+        <TempCard />
+      </div>
+    ),
+    code: tempCardSource,
+    props: [],
   },
   {
     slug: "upload-card",
