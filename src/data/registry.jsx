@@ -24,6 +24,8 @@ import { PulseProgressDemo } from "../components/showcase/PulseProgressDemo";
 import pulseProgressSource from "../components/ui/PulseProgress.jsx?raw";
 import TempCard from "../components/ui/TempCard";
 import tempCardSource from "../components/ui/TempCard.jsx?raw";
+import { PayFlowDemo } from "../components/showcase/PayFlowDemo";
+import payFlowSource from "../components/ui/PayFlow.jsx?raw";
 
 const carouselItems = [
   {
@@ -260,6 +262,33 @@ export default function UploadCardExample() {
       { name: "presetFiles", type: "Array<{ name, size, type, res? }>", default: "[...]", description: "List of preset demo video files available for one-click simulation" },
       { name: "onUploadComplete", type: "(file: File) => void", default: "undefined", description: "Callback triggered once the upload progress reaches 100%" },
       { name: "className", type: "string", default: "''", description: "Optional CSS classes to append to the wrapper container" },
+    ],
+  },
+  {
+    slug: "pay-flow",
+    name: "Pay Flow (UPI)",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "Authentic, tactile UPI payment flow featuring company-specific animations (Dominos dominoes, Apple MagSafe laser ring, Starbucks espresso steam, Swiggy speed scooter, Netflix prism ribbon, Uber GPS route), interactive PIN keypad, procedural sound synthesis, and spring-loaded settlement.",
+    tags: ["Payment", "UPI", "PayFlow", "Keypad", "Domino", "Animation", "Physics", "Fintech", "Micro-Interactions", "Multi-Company"],
+    installation: "components/ui/PayFlow.jsx",
+    dependencies: [],
+    demo: <PayFlowDemo />,
+    code: payFlowSource,
+    props: [
+      { name: "payee", type: "string", default: "'Dominos'", description: "Merchant or recipient name displayed on the header (auto-detects company animation)" },
+      { name: "company", type: "'auto' | 'dominos' | 'apple' | 'starbucks' | 'swiggy' | 'netflix' | 'uber'", default: "'auto'", description: "Explicit company animation theme override; defaults to auto-detecting based on payee" },
+      { name: "amount", type: "number", default: "340", description: "Payment amount in rupees to be transferred and counted up on success" },
+      { name: "currency", type: "string", default: "'₹'", description: "Currency symbol prefix" },
+      { name: "upiId", type: "string", default: "'dominos@okhdfc'", description: "Virtual Payment Address (VPA) / UPI ID of recipient" },
+      { name: "timestamp", type: "string", default: "'3 Oct 2026, 11:09 pm'", description: "Formatted transaction date and time" },
+      { name: "autoDemo", type: "boolean", default: "true", description: "Automatically simulates typing the PIN on mount so users see the flow immediately" },
+      { name: "demoPin", type: "string", default: "'482916'", description: "6-digit PIN code typed during auto-demo simulation" },
+      { name: "soundEnabled", type: "boolean", default: "false", description: "Enables synthetic Web Audio API procedural sound feedback tailored to each company" },
+      { name: "initialScreen", type: "'pin' | 'load' | 'done'", default: "'pin'", description: "Initial screen to display; set to 'load' to directly preview the company animation" },
+      { name: "onSuccess", type: "(details: { amount, payee, upiId, company }) => void", default: "undefined", description: "Callback triggered once the settlement screen completes" },
+      { name: "onReset", type: "() => void", default: "undefined", description: "Callback triggered when the flow is reset" },
+      { name: "className", type: "string", default: "''", description: "Additional CSS classes for outer smartphone container" },
     ],
   },
   {

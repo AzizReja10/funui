@@ -1,0 +1,1506 @@
+/* PayFlow — Authentic tactile UPI payment flow with multi-company animations & physics */
+.pf-phone {
+  --pf-bg: #F7F2EB;
+  --pf-page: #FFFFFF;
+  --pf-soft: #4a3f30;
+  --pf-ink: #2a2118;
+  --pf-mute: #8a7b66;
+  --pf-blue: #2373F4;
+  --pf-lime: #A1CB35;
+  --pf-sun: #FFD166;
+  --pf-ease: cubic-bezier(.22, 1, .36, 1);
+  --pf-spring: cubic-bezier(.34, 1.56, .64, 1);
+
+  position: relative;
+  width: min(100%, 390px);
+  height: 780px;
+  max-height: calc(100vh - 120px);
+  min-height: 640px;
+  overflow: hidden;
+  background: var(--pf-bg);
+  color: var(--pf-ink);
+  font-family: 'Bricolage Grotesque', ui-sans-serif, system-ui, sans-serif;
+  border-radius: clamp(28px, 6vw, 44px);
+  box-shadow: 0 0 0 1.5px rgba(42, 33, 24, 0.12),
+              0 24px 50px -12px rgba(42, 33, 24, 0.22),
+              0 10px 20px -6px rgba(0, 0, 0, 0.1);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.4s ease, color 0.4s ease, box-shadow 0.4s ease;
+}
+
+@media (min-width: 500px) {
+  .pf-phone {
+    box-shadow: 0 0 0 1.5px rgba(42, 33, 24, 0.16),
+                0 30px 65px -15px rgba(0, 0, 0, 0.28),
+                0 12px 24px -8px rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* ========================================================
+   Company Theme Overrides (Dynamic Branding per Merchant)
+   ======================================================== */
+.pf-phone[data-company="dominos"] {
+  --pf-blue: #006491;
+  --pf-lime: #A1CB35;
+}
+
+.pf-phone[data-company="apple"] {
+  --pf-blue: #0071E3;
+  --pf-lime: #0071E3;
+  --pf-soft: #424245;
+  --pf-mute: #86868B;
+}
+
+.pf-phone[data-company="starbucks"] {
+  --pf-blue: #006241;
+  --pf-lime: #00754A;
+  --pf-soft: #4D5643;
+  --pf-mute: #7F8B73;
+  --pf-sun: #D4AF37;
+}
+
+.pf-phone[data-company="swiggy"] {
+  --pf-blue: #FC8019;
+  --pf-lime: #FC8019;
+  --pf-soft: #4E5263;
+  --pf-mute: #7E808C;
+  --pf-sun: #FFA726;
+}
+
+.pf-phone[data-company="netflix"] {
+  --pf-blue: #E50914;
+  --pf-lime: #E50914;
+  --pf-soft: #4a3f30;
+  --pf-mute: #8a7b66;
+  --pf-sun: #FF3340;
+}
+
+.pf-phone[data-company="uber"] {
+  --pf-blue: #000000;
+  --pf-lime: #276EF1;
+  --pf-soft: #333333;
+  --pf-mute: #666666;
+}
+
+/* Smartphone hardware camera pill */
+.pf-island {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 96px;
+  height: 22px;
+  background: #1c150e;
+  border-radius: 999px;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+  box-shadow: inset 0 0 4px rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+.pf-lens {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #09080c;
+  border: 1px solid #2d2621;
+}
+
+/* Home Indicator Bar */
+.pf-home-bar {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 4px;
+  background: rgba(42, 33, 24, 0.22);
+  border-radius: 999px;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* Screens */
+.pf-screen {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 28px 32px;
+  transition: opacity .7s var(--pf-ease), transform .9s var(--pf-ease), filter .7s var(--pf-ease);
+  will-change: transform, opacity, filter;
+  box-sizing: border-box;
+}
+
+.pf-screen.off {
+  opacity: 0;
+  pointer-events: none;
+  filter: blur(12px);
+}
+
+.pf-screen-pin.off {
+  transform: scale(.94) translateY(-14px);
+}
+
+.pf-screen-load.off {
+  transform: scale(.92);
+}
+
+.pf-screen-done.off {
+  transform: translateY(24px);
+}
+
+/* PIN Dots */
+.pf-dots {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+}
+
+.pf-dot {
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1.8px solid rgba(42, 33, 24, 0.22);
+  transition: transform .5s var(--pf-spring), background .3s, border-color .3s;
+}
+
+.pf-dot.on {
+  transform: scale(1.22);
+  background: var(--pf-sun);
+  border-color: #EFAE2E;
+}
+
+/* Keypad */
+.pf-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 12px;
+  width: 100%;
+  max-width: 320px;
+}
+
+.pf-key {
+  position: relative;
+  height: 62px;
+  border-radius: 22px;
+  font-size: 26px;
+  font-weight: 300;
+  color: var(--pf-ink);
+  display: grid;
+  place-items: center;
+  user-select: none;
+  touch-action: manipulation;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  outline: none;
+  transition: transform .35s var(--pf-spring), background .4s var(--pf-ease);
+}
+
+.pf-key:hover {
+  background: rgba(42, 33, 24, 0.04);
+}
+
+.pf-key:active,
+.pf-key.press {
+  transform: scale(.88);
+  background: rgba(42, 33, 24, 0.08);
+  transition-duration: .08s;
+}
+
+.pf-key.pf-go {
+  background: var(--pf-blue);
+  color: #fff;
+  opacity: .3;
+  transform: scale(.9);
+  transition: opacity .5s var(--pf-ease), transform .6s var(--pf-spring), background .2s, box-shadow .3s;
+}
+
+.pf-key.pf-go.ready {
+  opacity: 1;
+  transform: scale(1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.pf-key.pf-go.ready:hover {
+  filter: brightness(1.1);
+}
+
+.pf-key.pf-go.ready:active {
+  transform: scale(.92);
+}
+
+/* Stage for centered loading animation */
+.pf-loader-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 140px;
+  position: relative;
+}
+
+/* ========================================================
+   1. DOMINOS ANIMATION (Iconic domino tiles toppling physics)
+   ======================================================== */
+.pf-anim-dominos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pf-row {
+  display: flex;
+  gap: 14px;
+  align-items: flex-end;
+  height: 60px;
+  position: relative;
+}
+
+.pf-tile {
+  width: 26px;
+  height: 52px;
+  border-radius: 7px;
+  background: #fff;
+  border: 1.5px solid rgba(42, 33, 24, 0.12);
+  box-shadow: 0 4px 12px rgba(42, 33, 24, 0.06);
+  display: flex;
+  flex-direction: column;
+  transform-origin: 100% 100%;
+  opacity: 0;
+  transform: translateY(-26px) scale(.9);
+}
+
+.pf-tile.last {
+  background: var(--pf-blue);
+  border-color: var(--pf-blue);
+  box-shadow: 0 4px 14px rgba(0, 100, 145, 0.35);
+}
+
+.pf-half {
+  flex: 1;
+  display: grid;
+  grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+  padding: 5px;
+  place-items: center;
+}
+
+.pf-half + .pf-half {
+  border-top: 1.5px solid rgba(42, 33, 24, 0.1);
+}
+
+.pf-tile.last .pf-half + .pf-half {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.pf-pip {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--pf-blue);
+}
+
+.pf-tile.last .pf-pip {
+  background: var(--pf-sun);
+}
+
+.pf-run.pf-row .pf-tile {
+  animation: pf-enter .6s var(--pf-ease) forwards, pf-topple 4.6s linear forwards;
+  animation-delay: calc(var(--i) * .07s), calc(.9s + var(--i) * .11s);
+  opacity: 1;
+}
+
+@keyframes pf-enter {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pf-topple {
+  0% {
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(.55, 0, .85, .45);
+  }
+  22% {
+    transform: rotate(64deg);
+    animation-timing-function: ease-out;
+  }
+  26% {
+    transform: rotate(60deg);
+  }
+  38% {
+    transform: rotate(60deg);
+    animation-timing-function: cubic-bezier(.3, .6, .4, 1);
+  }
+  58% {
+    transform: rotate(0);
+    animation-timing-function: cubic-bezier(.55, 0, .85, .45);
+  }
+  66% {
+    transform: rotate(0);
+  }
+  86% {
+    transform: rotate(64deg);
+    animation-timing-function: ease-out;
+  }
+  92%, 100% {
+    transform: rotate(60deg);
+  }
+}
+
+/* ========================================================
+   2. APPLE STORE ANIMATION (MagSafe Laser Ring & Hologram)
+   ======================================================== */
+.pf-anim-apple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 140px;
+  position: relative;
+}
+
+.pf-apple-halo {
+  position: relative;
+  width: 124px;
+  height: 124px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pf-apple-conic {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 0%, transparent 60%, rgba(0, 113, 227, 0.4) 82%, #0071E3 100%);
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #fff calc(100% - 3px));
+  mask: radial-gradient(farthest-side, transparent calc(100% - 3.5px), #fff calc(100% - 3px));
+  animation: pf-apple-spin 2s linear infinite;
+}
+
+@keyframes pf-apple-spin {
+  to { transform: rotate(360deg); }
+}
+
+.pf-apple-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(0, 113, 227, 0.3);
+  pointer-events: none;
+}
+
+.pf-ring-1 {
+  animation: pf-apple-wave 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+}
+
+.pf-ring-2 {
+  animation: pf-apple-wave 2.4s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+  animation-delay: 1.2s;
+}
+
+@keyframes pf-apple-wave {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.45); opacity: 0; }
+}
+
+.pf-apple-sparkle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #64D2FF;
+  box-shadow: 0 0 10px #64D2FF;
+}
+
+.pf-sp-1 {
+  top: 4px;
+  left: 24px;
+  animation: pf-apple-sparkle-1 3s ease-in-out infinite;
+}
+.pf-sp-2 {
+  bottom: 12px;
+  right: 18px;
+  animation: pf-apple-sparkle-2 2.6s ease-in-out infinite;
+}
+.pf-sp-3 {
+  top: 46px;
+  right: -4px;
+  animation: pf-apple-sparkle-1 2.2s ease-in-out infinite reverse;
+}
+
+@keyframes pf-apple-sparkle-1 {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+@keyframes pf-apple-sparkle-2 {
+  0%, 100% { opacity: 0.8; transform: scale(1.2); }
+  50% { opacity: 0.2; transform: scale(0.6); }
+}
+
+.pf-apple-disc {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(0, 113, 227, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 113, 227, 0.22),
+              inset 0 0 12px rgba(255, 255, 255, 0.9);
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow: hidden;
+  animation: pf-apple-float 3s ease-in-out infinite alternate;
+}
+
+@keyframes pf-apple-float {
+  0% { transform: scale(1) translateY(0); }
+  100% { transform: scale(1.03) translateY(-2px); }
+}
+
+.pf-apple-logo {
+  width: 34px;
+  height: 34px;
+  color: #1D1D1F;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+}
+
+.pf-apple-scanner {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #0071E3, #64D2FF, #0071E3, transparent);
+  box-shadow: 0 0 8px #64D2FF;
+  animation: pf-apple-scan 2.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+@keyframes pf-apple-scan {
+  0% { top: 6px; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { top: 68px; opacity: 0; }
+}
+
+/* ========================================================
+   3. STARBUCKS ANIMATION (Espresso Pour, Steam & Rising Crema)
+   ======================================================== */
+.pf-anim-starbucks {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 140px;
+  position: relative;
+}
+
+.pf-sb-dropper {
+  position: absolute;
+  top: -12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 48px;
+}
+
+.pf-sb-stream {
+  width: 3px;
+  height: 34px;
+  background: linear-gradient(180deg, rgba(124, 71, 36, 0.4), #663300);
+  border-radius: 2px;
+  animation: pf-sb-stream-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pf-sb-stream-pulse {
+  0%, 100% { transform: scaleY(0.95); opacity: 0.8; }
+  50% { transform: scaleY(1.05); opacity: 1; }
+}
+
+.pf-sb-drop {
+  position: absolute;
+  width: 5px;
+  height: 7px;
+  background: #663300;
+  border-radius: 50% 50% 40% 40%;
+}
+
+.pf-d1 {
+  animation: pf-sb-drip 1.2s cubic-bezier(.4, 0, .6, 1) infinite;
+}
+
+.pf-d2 {
+  animation: pf-sb-drip 1.2s cubic-bezier(.4, 0, .6, 1) infinite;
+  animation-delay: 0.6s;
+}
+
+@keyframes pf-sb-drip {
+  0% { top: 0; opacity: 0; transform: scale(0.6); }
+  20% { opacity: 1; }
+  80% { top: 38px; opacity: 1; transform: scale(1.1); }
+  100% { top: 44px; opacity: 0; transform: scale(0.4); }
+}
+
+.pf-sb-steam-wrap {
+  display: flex;
+  gap: 10px;
+  height: 38px;
+  align-items: flex-end;
+  margin-bottom: 2px;
+  z-index: 10;
+}
+
+.pf-sb-steam {
+  width: 14px;
+  height: 36px;
+  color: #CBA258;
+}
+
+.pf-steam-1 {
+  animation: pf-sb-steam-wave 2.4s ease-in-out infinite;
+}
+.pf-steam-2 {
+  animation: pf-sb-steam-wave 2.8s ease-in-out infinite 0.4s;
+}
+.pf-steam-3 {
+  animation: pf-sb-steam-wave 2.2s ease-in-out infinite 0.8s;
+}
+
+@keyframes pf-sb-steam-wave {
+  0% { transform: translateY(0) scaleY(0.8) scaleX(1); opacity: 0.1; }
+  50% { opacity: 0.7; transform: translateY(-12px) scaleY(1.1) scaleX(1.1) skewX(4deg); }
+  100% { transform: translateY(-24px) scaleY(1.3) scaleX(0.8) skewX(-4deg); opacity: 0; }
+}
+
+.pf-sb-cup {
+  width: 68px;
+  height: 54px;
+  background: #FFFFFF;
+  border: 2px solid #D1C5B4;
+  border-radius: 4px 4px 24px 24px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 98, 65, 0.14);
+}
+
+.pf-sb-liquid {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 72%;
+  background: linear-gradient(180deg, #8B4A23 0%, #4E250A 100%);
+  border-radius: 0 0 22px 22px;
+  animation: pf-sb-fill 3.6s ease-in-out infinite alternate;
+}
+
+@keyframes pf-sb-fill {
+  0% { height: 45%; }
+  100% { height: 82%; }
+}
+
+.pf-sb-crema {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: #F4E4C6;
+  border-radius: 999px;
+  box-shadow: 0 1px 4px rgba(244, 228, 198, 0.6);
+}
+
+.pf-sb-badge {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #006241;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 6px rgba(0, 98, 65, 0.35);
+  z-index: 5;
+}
+
+.pf-sb-star {
+  width: 20px;
+  height: 20px;
+}
+
+.pf-sb-handle {
+  position: absolute;
+  top: 10px;
+  right: -13px;
+  width: 14px;
+  height: 22px;
+  border: 2.5px solid #D1C5B4;
+  border-left: none;
+  border-radius: 0 10px 10px 0;
+}
+
+.pf-sb-saucer {
+  width: 82px;
+  height: 7px;
+  background: #E8E2D8;
+  border: 1.5px solid #D1C5B4;
+  border-radius: 999px;
+  margin-top: 2px;
+}
+
+/* ========================================================
+   4. SWIGGY ANIMATION (Fast Delivery Scooter & Racing Road)
+   ======================================================== */
+.pf-anim-swiggy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 190px;
+  height: 130px;
+  position: relative;
+}
+
+.pf-sw-wind {
+  position: absolute;
+  top: 22px;
+  left: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.pf-sw-streak {
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent, rgba(252, 128, 25, 0.7));
+}
+
+.pf-w1 { width: 36px; animation: pf-sw-wind 0.7s linear infinite; }
+.pf-w2 { width: 48px; animation: pf-sw-wind 0.6s linear infinite 0.2s; }
+.pf-w3 { width: 28px; animation: pf-sw-wind 0.8s linear infinite 0.4s; }
+
+@keyframes pf-sw-wind {
+  0% { transform: translateX(50px); opacity: 0; }
+  40% { opacity: 1; }
+  100% { transform: translateX(-20px); opacity: 0; }
+}
+
+.pf-sw-scooter {
+  position: relative;
+  width: 110px;
+  height: 74px;
+  animation: pf-sw-bob 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes pf-sw-bob {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(-3px) rotate(-1deg); }
+}
+
+.pf-sw-rider {
+  position: absolute;
+  top: 4px;
+  left: 42px;
+  display: flex;
+  align-items: center;
+}
+
+.pf-sw-helmet {
+  width: 22px;
+  height: 22px;
+  background: #FC8019;
+  border-radius: 50% 50% 45% 45%;
+  border: 2px solid #282C3F;
+  box-shadow: 0 2px 6px rgba(252, 128, 25, 0.4);
+}
+
+.pf-sw-visor {
+  position: absolute;
+  top: 7px;
+  right: -3px;
+  width: 8px;
+  height: 7px;
+  background: #1F222E;
+  border-radius: 0 4px 4px 0;
+}
+
+.pf-sw-box {
+  position: absolute;
+  top: 14px;
+  left: 8px;
+  width: 30px;
+  height: 30px;
+  background: #FC8019;
+  border-radius: 6px;
+  border: 1.5px solid #E06C0C;
+  box-shadow: 0 4px 10px rgba(252, 128, 25, 0.35);
+  display: grid;
+  place-items: center;
+}
+
+.pf-sw-frame {
+  position: absolute;
+  bottom: 18px;
+  left: 20px;
+  width: 70px;
+  height: 18px;
+  background: #282C3F;
+  border-radius: 6px 14px 6px 6px;
+}
+
+.pf-sw-headlight {
+  position: absolute;
+  top: -8px;
+  right: -2px;
+  width: 10px;
+  height: 12px;
+  background: #FFD166;
+  border-radius: 3px 6px 6px 3px;
+  box-shadow: 0 0 10px #FFD166;
+}
+
+.pf-sw-beam {
+  position: absolute;
+  top: -12px;
+  right: -42px;
+  width: 42px;
+  height: 20px;
+  background: linear-gradient(90deg, rgba(255, 209, 102, 0.6), transparent);
+  clip-path: polygon(0% 40%, 100% 0%, 100% 100%, 0% 60%);
+  pointer-events: none;
+}
+
+.pf-sw-wheel {
+  position: absolute;
+  bottom: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #1E2028;
+  border: 3.5px solid #3F4452;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.pf-front { right: 8px; }
+.pf-rear { left: 12px; }
+
+.pf-sw-hub {
+  width: 6px;
+  height: 6px;
+  background: #FC8019;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+.pf-sw-spoke {
+  position: absolute;
+  width: 100%;
+  height: 1.5px;
+  background: #7E8394;
+  animation: pf-sw-wheel-spin 0.32s linear infinite;
+}
+
+.pf-sp2 {
+  transform: rotate(90deg);
+}
+
+@keyframes pf-sw-wheel-spin {
+  to { transform: rotate(360deg); }
+}
+
+.pf-sw-exhaust {
+  position: absolute;
+  bottom: 8px;
+  left: 2px;
+}
+
+.pf-sw-puff {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  background: rgba(126, 131, 148, 0.35);
+  border-radius: 50%;
+}
+
+.pf-p1 { animation: pf-sw-smoke 0.7s ease-out infinite; }
+.pf-p2 { animation: pf-sw-smoke 0.7s ease-out infinite 0.35s; }
+
+@keyframes pf-sw-smoke {
+  0% { transform: scale(0.6) translate(0, 0); opacity: 0.8; }
+  100% { transform: scale(2) translate(-18px, -8px); opacity: 0; }
+}
+
+.pf-sw-road {
+  width: 160px;
+  height: 3px;
+  margin-top: -2px;
+  overflow: hidden;
+  position: relative;
+}
+
+.pf-sw-dashes {
+  width: 300%;
+  height: 100%;
+  background: repeating-linear-gradient(90deg, #FC8019 0, #FC8019 14px, transparent 14px, transparent 28px);
+  animation: pf-sw-road-dash 0.35s linear infinite;
+}
+
+@keyframes pf-sw-road-dash {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-56px); }
+}
+
+/* ========================================================
+   5. NETFLIX ANIMATION (Cinematic 'N' Ribbon Prism Flare)
+   ======================================================== */
+.pf-anim-netflix {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 140px;
+  height: 140px;
+  position: relative;
+}
+
+.pf-nf-spectrum {
+  position: absolute;
+  inset: -10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.pf-nf-beam {
+  position: absolute;
+  width: 3px;
+  height: 120px;
+  filter: blur(8px);
+  opacity: 0.65;
+  animation: pf-nf-beam-pulse 2s ease-in-out infinite alternate;
+}
+
+.pf-beam-red { background: #E50914; transform: rotate(-24deg); }
+.pf-beam-violet { background: #9B51E0; transform: rotate(18deg); animation-delay: 0.3s; }
+.pf-beam-cyan { background: #00F0FF; transform: rotate(-8deg); animation-delay: 0.7s; }
+.pf-beam-amber { background: #FFA800; transform: rotate(34deg); animation-delay: 1.1s; }
+
+@keyframes pf-nf-beam-pulse {
+  0% { opacity: 0.3; transform: scaleY(0.7) rotate(var(--rot, 0deg)); }
+  100% { opacity: 0.85; transform: scaleY(1.2) rotate(var(--rot, 0deg)); }
+}
+
+.pf-nf-n {
+  position: relative;
+  width: 60px;
+  height: 90px;
+  display: flex;
+  box-shadow: 0 10px 30px rgba(229, 9, 20, 0.45);
+}
+
+.pf-nf-ribbon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 18px;
+}
+
+.pf-ribbon-left {
+  left: 0;
+  background: #E50914;
+  box-shadow: 0 0 12px rgba(229, 9, 20, 0.5);
+}
+
+.pf-ribbon-right {
+  right: 0;
+  background: #B80610;
+}
+
+.pf-ribbon-diag {
+  left: 0;
+  right: 0;
+  background: linear-gradient(135deg, #FF1E27 0%, #E50914 100%);
+  transform-origin: top left;
+  transform: skewX(-27deg);
+  width: 19px;
+  box-shadow: -4px 0 12px rgba(0, 0, 0, 0.6);
+  z-index: 5;
+}
+
+.pf-nf-flare {
+  position: absolute;
+  top: 50%;
+  left: -20px;
+  right: -20px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #FFFFFF, #64D2FF, transparent);
+  box-shadow: 0 0 14px #FFFFFF;
+  animation: pf-nf-flare-glide 2.4s ease-in-out infinite;
+  z-index: 10;
+}
+
+@keyframes pf-nf-flare-glide {
+  0% { transform: translateY(-40px); opacity: 0; }
+  30% { opacity: 1; }
+  70% { opacity: 1; }
+  100% { transform: translateY(40px); opacity: 0; }
+}
+
+.pf-nf-glow {
+  position: absolute;
+  inset: -12px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(229, 9, 20, 0.28) 0%, transparent 70%);
+  animation: pf-nf-glow-breath 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+
+@keyframes pf-nf-glow-breath {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 0.9; }
+}
+
+/* ========================================================
+   6. UBER ANIMATION (GPS Navigation Route Glide & Beacon)
+   ======================================================== */
+.pf-anim-uber {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 180px;
+  height: 120px;
+  position: relative;
+}
+
+.pf-ub-map {
+  position: relative;
+  width: 170px;
+  height: 104px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1.5px solid rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.pf-ub-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(39, 110, 241, 0.06) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(39, 110, 241, 0.06) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+.pf-ub-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.pf-ub-path-active {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: pf-ub-draw-path 2.8s ease-in-out infinite alternate;
+}
+
+@keyframes pf-ub-draw-path {
+  0% { stroke-dashoffset: 200; }
+  100% { stroke-dashoffset: 0; }
+}
+
+.pf-ub-pin {
+  position: absolute;
+  right: 18px;
+  top: 48px;
+  transform: translate(50%, -50%);
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+}
+
+.pf-ub-radar {
+  position: absolute;
+  inset: -6px;
+  border-radius: 50%;
+  border: 2px solid #276EF1;
+  animation: pf-ub-radar-pulse 2s ease-out infinite;
+}
+
+@keyframes pf-ub-radar-pulse {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+.pf-ub-dot {
+  width: 8px;
+  height: 8px;
+  background: #276EF1;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #276EF1;
+}
+
+.pf-ub-car {
+  position: absolute;
+  width: 24px;
+  height: 13px;
+  animation: pf-ub-car-drive 5.6s ease-in-out infinite alternate;
+  transform-origin: center;
+}
+
+.pf-ub-car-body {
+  width: 100%;
+  height: 100%;
+  background: #000000;
+  border-radius: 4px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+  position: relative;
+}
+
+.pf-ub-car-lights {
+  position: absolute;
+  top: 2px;
+  right: -3px;
+  width: 3px;
+  height: 9px;
+  background: #FFD166;
+  border-radius: 0 2px 2px 0;
+  box-shadow: 0 0 6px #FFD166;
+}
+
+@keyframes pf-ub-car-drive {
+  0% { top: 72px; left: 16px; transform: rotate(0deg); }
+  35% { top: 56px; left: 62px; transform: rotate(-35deg); }
+  70% { top: 18px; left: 110px; transform: rotate(0deg); }
+  100% { top: 44px; left: 140px; transform: rotate(45deg); }
+}
+
+/* ========================================================
+   7. GENERIC FINTECH ANIMATION (Interlocking Quantum Rings)
+   ======================================================== */
+.pf-anim-fintech {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  height: 130px;
+  position: relative;
+}
+
+.pf-ft-rings {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  display: grid;
+  place-items: center;
+}
+
+.pf-ft-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 2px dashed rgba(37, 99, 235, 0.4);
+}
+
+.pf-r1 {
+  inset: 0;
+  animation: pf-apple-spin 8s linear infinite;
+}
+
+.pf-r2 {
+  inset: 12px;
+  border-style: solid;
+  border-color: rgba(37, 99, 235, 0.25);
+  animation: pf-apple-spin 6s linear infinite reverse;
+}
+
+.pf-r3 {
+  inset: 22px;
+  border: 2px solid rgba(16, 185, 129, 0.35);
+  animation: pf-apple-wave 2s ease-out infinite;
+}
+
+.pf-ft-center {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(37, 99, 235, 0.2);
+  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.2);
+  display: grid;
+  place-items: center;
+  color: #2563EB;
+}
+
+/* ========================================================
+   Status text crossfade
+   ======================================================== */
+.pf-status-box {
+  position: relative;
+  height: 26px;
+  width: 100%;
+  margin-top: 48px;
+}
+
+.pf-status {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 15px;
+  color: var(--pf-mute);
+  margin: 0;
+  transition: opacity .7s var(--pf-ease), transform .8s var(--pf-ease), filter .7s var(--pf-ease);
+}
+
+.pf-status.out {
+  opacity: 0;
+  transform: translateY(8px);
+  filter: blur(6px);
+}
+
+.pf-status.up {
+  opacity: 0;
+  transform: translateY(-8px);
+  filter: blur(6px);
+}
+
+/* ========================================================
+   Success Screen Elements & Tick Mark Transition Animation
+   ======================================================== */
+.pf-disc-wrap {
+  position: relative;
+  width: 88px;
+  height: 88px;
+  transition: transform 1.3s var(--pf-ease);
+  display: grid;
+  place-items: center;
+}
+
+.pf-disc-wrap.center {
+  transform: translateY(clamp(110px, 30vh, 270px));
+}
+
+/* Pre-transition Spinner Ring (spins before the tick draws and morphs into it) */
+.pf-pre-spinner {
+  position: absolute;
+  inset: -6px;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.35s ease, transform 0.4s var(--pf-ease);
+}
+
+.pf-pre-spinner.done {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
+.pf-spinner-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.pf-spinner-track {
+  fill: none;
+  stroke: rgba(42, 33, 24, 0.08);
+  stroke-width: 3.5;
+}
+
+.pf-spinner-arc {
+  fill: none;
+  stroke: var(--pf-lime);
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-dasharray: 252;
+  stroke-dashoffset: 252;
+  animation: pf-pre-spin 0.65s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+@keyframes pf-pre-spin {
+  0% {
+    stroke-dashoffset: 252;
+    transform: rotate(0deg);
+  }
+  50% {
+    stroke-dashoffset: 70;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    transform: rotate(360deg);
+  }
+}
+
+/* Celebratory Starburst Particles */
+.pf-burst-wrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.pf-burst-particle {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--pf-sun);
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0) scale(0);
+}
+
+.pf-burst-particle:nth-child(even) {
+  width: 5px;
+  height: 5px;
+  background: #FFF;
+  border-radius: 1px;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0) rotate(45deg) scale(0);
+}
+
+.pf-burst-wrap.active .pf-burst-particle {
+  animation: pf-burst-fly 0.85s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes pf-burst-fly {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(0) scale(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-56px) scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(var(--angle)) translateY(-70px) scale(0.3);
+  }
+}
+
+/* Main Success Check Disc */
+.pf-check-disc {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--pf-lime);
+  transform: scale(0);
+  transition: transform .8s var(--pf-spring);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+
+.pf-check-disc.in {
+  transform: scale(1);
+}
+
+.pf-check-disc.pop {
+  animation: pf-pop .7s var(--pf-ease);
+}
+
+@keyframes pf-pop {
+  0% { transform: scale(1); }
+  28% { transform: scale(1.2); }
+  58% { transform: scale(0.95); }
+  82% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Diagonal Specular Sheen Sweep */
+.pf-disc-sheen {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, transparent 35%, rgba(255, 255, 255, 0.6) 50%, transparent 65%);
+  transform: translateX(-120%) translateY(-120%);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.pf-check-disc.pop .pf-disc-sheen {
+  animation: pf-sheen-sweep 0.75s ease-out forwards;
+}
+
+@keyframes pf-sheen-sweep {
+  0% {
+    transform: translateX(-120%) translateY(-120%);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(120%) translateY(120%);
+    opacity: 0;
+  }
+}
+
+/* Checkmark Path Drawing */
+.pf-tick-svg {
+  position: relative;
+  z-index: 3;
+}
+
+.pf-tick {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  transition: stroke-dashoffset 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pf-check-disc.draw .pf-tick {
+  stroke-dashoffset: 0;
+}
+
+/* Vertex Impact Flash */
+.pf-vertex-burst {
+  opacity: 0;
+  transform-origin: 19px 31px;
+}
+
+.pf-check-disc.draw .pf-vertex-burst {
+  animation: pf-vertex-flash 0.5s ease-out forwards;
+  animation-delay: 0.22s;
+}
+
+@keyframes pf-vertex-flash {
+  0% {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.8);
+  }
+}
+
+.pf-ripple {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--pf-lime);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.pf-go-ripple .pf-ripple {
+  animation: pf-ripple 2s var(--pf-ease) forwards;
+}
+
+.pf-go-ripple .pf-ripple:nth-child(2) {
+  animation-delay: .18s;
+}
+
+.pf-go-ripple .pf-ripple:nth-child(3) {
+  animation-delay: .36s;
+}
+
+@keyframes pf-ripple {
+  0% {
+    transform: scale(.8);
+    opacity: .8;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+
+.pf-rise {
+  opacity: 0;
+  transform: translateY(18px);
+  filter: blur(8px);
+  transition: opacity .9s var(--pf-ease), transform 1s var(--pf-ease), filter .9s var(--pf-ease);
+}
+
+.pf-rise.in {
+  opacity: 1;
+  transform: none;
+  filter: none;
+}
+
+.pf-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: 999px;
+  font-size: 14px;
+  border: 1.5px solid rgba(42, 33, 24, 0.12);
+  color: var(--pf-blue);
+  background: transparent;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .35s var(--pf-spring), background .3s;
+}
+
+.pf-chip:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.pf-chip:active {
+  transform: scale(.94);
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.pf-cta {
+  width: 100%;
+  height: 56px;
+  border-radius: 20px;
+  font-weight: 500;
+  font-size: 17px;
+  color: #fff;
+  background: var(--pf-blue);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  transition: transform .35s var(--pf-spring), background .2s, box-shadow .2s;
+}
+
+.pf-cta:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.pf-cta:active {
+  transform: scale(.96);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-phone * {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ArrowRight, Sparkles, Terminal, Copy, Check, Shield, Zap, Layers, ArrowUpRight, Globe, Calendar } from "lucide-react";
+import { ArrowRight, Sparkles, Terminal, Copy, Check, Shield, Zap, Layers, ArrowUpRight, Globe, Calendar, Smartphone } from "lucide-react";
 import { Button } from "../ui/Button";
 import { Badge } from "../ui/Badge";
 import { Switch } from "../ui/Switch";
@@ -314,6 +314,39 @@ export function HomePage({ onNavigate }) {
               </div>
             </div>
             <p className="text-xs text-muted mt-2">Atmospheric calendar with season-specific colorways, drifting particles (snow, petals, autumn leaves), 3D flip page physics, and rolling hill silhouettes.</p>
+          </div>
+
+          {/* Card 9: Pay Flow (UPI) */}
+          <div
+            onClick={() => onNavigate("pay-flow")}
+            className="rounded-2xl border border-border bg-bg p-6 hover:border-fg/30 transition-all cursor-pointer group shadow-2xs md:col-span-2"
+          >
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-mono font-medium text-muted uppercase">09 / Pay Flow (UPI)</span>
+              <div className="flex items-center gap-2">
+                <Badge variant="lime" size="xs">New</Badge>
+                <span className="text-xs font-medium text-muted group-hover:text-fg flex items-center gap-1 transition-colors">
+                  Inspect <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
+                </span>
+              </div>
+            </div>
+            <div className="py-2 flex items-center justify-between flex-wrap gap-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-blue-600 via-emerald-500 to-amber-300 flex items-center justify-center text-white text-xs shadow-md shadow-blue-500/20">
+                  <Smartphone size={14} className="text-white" />
+                </div>
+                <div>
+                  <span className="text-xs font-semibold text-fg">Tactile UPI Payment Flow</span>
+                  <div className="text-[10px] font-mono text-muted">6-Digit PIN Keypad • Toppling Domino Physics • Sound Synthesis • Settlement Screen</div>
+                </div>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">Domino Loader</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">Sound Box</span>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">Micro-Interactions</span>
+              </div>
+            </div>
+            <p className="text-xs text-muted mt-2">Authentic smartphone UPI payment flow featuring interactive PIN entry with key flashes, physics-based domino loader, procedural Web Audio victory chime, and spring settlement screen.</p>
           </div>
         </div>
       </section>
