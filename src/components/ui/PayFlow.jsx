@@ -327,24 +327,78 @@ function DominosAnimation({ isRunning }) {
 }
 
 /**
- * 2. Apple Animation: MagSafe Laser Ring with iridescent shimmer & biometric scan
+ * 2. Apple Animation: MagSafe Geometric Ring, Laser Contour Drawing,
+ * Titanium Gradient Fill, FaceID Biometric Scan, and Dual-Orbit Energy Particles
  */
 function AppleAnimation({ isRunning }) {
   return (
     <div className={`pf-anim-apple ${isRunning ? "pf-run" : ""}`}>
-      <div className="pf-apple-halo">
-        <div className="pf-apple-conic" />
-        <div className="pf-apple-ring pf-ring-1" />
-        <div className="pf-apple-ring pf-ring-2" />
-        <div className="pf-apple-sparkle pf-sp-1" />
-        <div className="pf-apple-sparkle pf-sp-2" />
-        <div className="pf-apple-sparkle pf-sp-3" />
+      <div className="pf-apple-stage">
+        {/* MagSafe Geometric Magnetic Ring System */}
+        <div className="pf-apple-magsafe">
+          <svg className="pf-magsafe-svg" viewBox="0 0 160 160">
+            {/* Concentric magnetic pulse waves */}
+            <circle cx="80" cy="80" r="74" className="pf-magsafe-wave pf-wave-1" />
+            <circle cx="80" cy="80" r="74" className="pf-magsafe-wave pf-wave-2" />
 
-        <div className="pf-apple-disc">
-          <svg className="pf-apple-logo" viewBox="0 0 170 170" fill="currentColor">
-            <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.35.13-9.16-1.9-14.42-6.08-3.7-3.04-7.66-7.82-11.89-14.34-5.99-9.25-10.74-19.8-14.25-31.65-3.51-11.85-5.27-23.2-5.27-34.05 0-14.03 3.65-25.75 10.96-35.17 7.31-9.42 16.59-14.27 27.84-14.56 5.69 0 11.66 1.63 17.9 4.89 6.24 3.25 10.5 4.93 12.78 5.03 1.94 0 6.42-1.8 13.43-5.41 7.01-3.61 13.36-5.16 19.06-4.66 14.72 1.15 26.24 6.78 34.56 16.9-13.06 7.9-19.46 18.84-19.2 32.82.26 10.87 4.35 19.98 12.28 27.33 7.93 7.35 17.51 11.62 28.74 12.82-2.35 7.15-5.06 14.15-8.13 21zm-28.53-125.6c0 6.84-2.4 13.32-7.2 19.44-5.8 7.2-13.05 11.59-21.75 13.16-.13-1.42-.2-2.61-.2-3.57 0-6.84 2.68-13.78 8.04-20.82 5.36-7.04 12.39-11.45 21.11-13.21z" />
+            {/* MagSafe 8-segment magnetic ring */}
+            <circle cx="80" cy="80" r="66" className="pf-magsafe-track" />
+            <circle cx="80" cy="80" r="66" className="pf-magsafe-segmented" />
           </svg>
-          <div className="pf-apple-scanner" />
+
+          {/* Rotating MagSafe iridescent laser arc */}
+          <div className="pf-apple-laser-arc" />
+
+          {/* Dual orbital energy sparks revolving at high speed */}
+          <div className="pf-apple-orbit-spark pf-spark-1" />
+          <div className="pf-apple-orbit-spark pf-spark-2" />
+        </div>
+
+        {/* Central Luxury Frosted Glass Disc with Apple Logo */}
+        <div className="pf-apple-glass-badge">
+          {/* Glass reflection gloss */}
+          <div className="pf-apple-glass-reflection" />
+
+          {/* FaceID Biometric Scan Waveform Beam */}
+          <div className="pf-apple-biometric-scanner">
+            <span className="pf-scan-bar" />
+            <span className="pf-scan-glow" />
+          </div>
+
+          {/* Apple Logo with SVG laser path draw & metallic gradient */}
+          <svg className="pf-apple-svg" viewBox="0 0 100 100" fill="none">
+            <defs>
+              <linearGradient id="appleTitanium" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#0071E3" />
+                <stop offset="45%" stopColor="#2563EB" />
+                <stop offset="75%" stopColor="#6366F1" />
+                <stop offset="100%" stopColor="#06B6D4" />
+              </linearGradient>
+            </defs>
+
+            {/* Apple Leaf */}
+            <path
+              className="pf-apple-leaf"
+              d="M61.4 30.5c2.6-3.2 4.4-7.6 3.9-12.1-3.9.2-8.5 2.6-11.2 5.8-2.4 2.8-4.5 7.3-3.9 11.7 4.3.3 8.6-2.2 11.2-5.4z"
+              fill="url(#appleTitanium)"
+            />
+
+            {/* Apple Silhouette Body */}
+            <path
+              className="pf-apple-body"
+              d="M78.6 61.2c-.3 4.2-2.1 8-4.9 11-3.3 3.6-7.3 7-12.7 7-4.9 0-7.7-3-13.6-3s-9.1 3-13.7 3c-5.1 0-9.4-3.7-12.7-7.4-6.6-7.4-11.7-21-5.1-32.3 3.3-5.6 9.1-9.2 15.6-9.3 4.9-.1 9.4 3.3 12.3 3.3 2.9 0 8.5-4.1 14.5-3.5 2.5.1 9.6 1 14.1 7.6-11.7 6.4-9.8 22.3 6.4 23.6z"
+              fill="url(#appleTitanium)"
+            />
+
+            {/* Glowing Laser Outline that traces the Apple contour */}
+            <path
+              className="pf-apple-laser-contour"
+              d="M78.6 61.2c-.3 4.2-2.1 8-4.9 11-3.3 3.6-7.3 7-12.7 7-4.9 0-7.7-3-13.6-3s-9.1 3-13.7 3c-5.1 0-9.4-3.7-12.7-7.4-6.6-7.4-11.7-21-5.1-32.3 3.3-5.6 9.1-9.2 15.6-9.3 4.9-.1 9.4 3.3 12.3 3.3 2.9 0 8.5-4.1 14.5-3.5 2.5.1 9.6 1 14.1 7.6-11.7 6.4-9.8 22.3 6.4 23.6z"
+              stroke="#64D2FF"
+              strokeWidth="2.4"
+              strokeLinecap="round"
+            />
+          </svg>
         </div>
       </div>
     </div>
@@ -458,29 +512,117 @@ function SwiggyAnimation({ isRunning }) {
   );
 }
 
+const NETFLIX_SPECTRAL_BEAMS = [
+  { color: "#E50914", width: 3, delay: "0s", height: "115%" },
+  { color: "#FF5722", width: 2, delay: "0.08s", height: "135%" },
+  { color: "#FFA800", width: 3, delay: "0.15s", height: "125%" },
+  { color: "#FFD600", width: 1.5, delay: "0.22s", height: "110%" },
+  { color: "#00E5FF", width: 2.5, delay: "0.05s", height: "140%" },
+  { color: "#0066FF", width: 3, delay: "0.18s", height: "130%" },
+  { color: "#9B51E0", width: 2, delay: "0.12s", height: "120%" },
+  { color: "#FF007A", width: 3.5, delay: "0.02s", height: "145%" },
+  { color: "#B476FF", width: 2, delay: "0.25s", height: "115%" },
+  { color: "#E50914", width: 4, delay: "0.06s", height: "135%" },
+  { color: "#00F0FF", width: 2, delay: "0.16s", height: "125%" },
+  { color: "#FF3366", width: 3, delay: "0.1s", height: "140%" },
+  { color: "#FF9900", width: 2.5, delay: "0.2s", height: "120%" },
+  { color: "#7928CA", width: 3, delay: "0.14s", height: "130%" },
+];
+
 /**
- * 5. Netflix Animation: Cinematic 'N' ribbon with spectral light flare & lens sweep
+ * 5. Netflix Animation: The Iconic "Ta-Dum" Monogram Unfold with 14 Spectral
+ * Laser Threads, Curved Arch Geometry, Anamorphic Lens Flare, and Cinema Embers
  */
 function NetflixAnimation({ isRunning }) {
   return (
     <div className={`pf-anim-netflix ${isRunning ? "pf-run" : ""}`}>
-      {/* Radiating Anamorphic Spectral Rays */}
-      <div className="pf-nf-spectrum">
-        <div className="pf-nf-beam pf-beam-red" />
-        <div className="pf-nf-beam pf-beam-violet" />
-        <div className="pf-nf-beam pf-beam-cyan" />
-        <div className="pf-nf-beam pf-beam-amber" />
+      {/* Cinematic Theater Ambient Backlight & Vignette */}
+      <div className="pf-nf-theater-aura" />
+
+      {/* Floating Cinematic Dust / Light Embers */}
+      <div className="pf-nf-embers" aria-hidden="true">
+        <span className="pf-nf-ember pf-emb-1" />
+        <span className="pf-nf-ember pf-emb-2" />
+        <span className="pf-nf-ember pf-emb-3" />
+        <span className="pf-nf-ember pf-emb-4" />
+        <span className="pf-nf-ember pf-emb-5" />
       </div>
 
-      {/* Netflix 'N' 3-part ribbon structure */}
-      <div className="pf-nf-n">
-        <div className="pf-nf-ribbon pf-ribbon-left" />
-        <div className="pf-nf-ribbon pf-ribbon-right" />
-        <div className="pf-nf-ribbon pf-ribbon-diag" />
-        <div className="pf-nf-flare" />
+      {/* 14 Multi-Color Spectral Fiber-Optic Light Shafts ("Ta-Dum" Explosion) */}
+      <div className="pf-nf-spectral-stage">
+        {NETFLIX_SPECTRAL_BEAMS.map((beam, idx) => (
+          <div
+            key={idx}
+            className="pf-nf-spectral-shaft"
+            style={{
+              backgroundColor: beam.color,
+              boxShadow: `0 0 12px ${beam.color}, 0 0 24px ${beam.color}`,
+              width: `${beam.width}px`,
+              height: beam.height,
+              animationDelay: beam.delay,
+            }}
+          />
+        ))}
       </div>
 
-      <div className="pf-nf-glow" />
+      {/* The Iconic Netflix 'N' 3D Ribbon Monogram with Curved Arch Base */}
+      <div className="pf-nf-monogram">
+        <svg className="pf-nf-svg" viewBox="0 0 100 130" fill="none">
+          <defs>
+            {/* 3D Drop Shadow for the overlapping diagonal ribbon */}
+            <filter id="nfDropShadow" x="-30%" y="-20%" width="160%" height="150%">
+              <feDropShadow dx="-6" dy="2" stdDeviation="4.5" floodColor="#000" floodOpacity="0.75" />
+            </filter>
+
+            {/* Left pillar shadow gradient */}
+            <linearGradient id="nfLeftGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#C4151C" />
+              <stop offset="100%" stopColor="#8A0B10" />
+            </linearGradient>
+
+            {/* Right pillar gradient */}
+            <linearGradient id="nfRightGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#B20F16" />
+              <stop offset="100%" stopColor="#78080C" />
+            </linearGradient>
+
+            {/* Diagonal ribbon radiant crimson gradient */}
+            <linearGradient id="nfDiagGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#FF232E" />
+              <stop offset="40%" stopColor="#E50914" />
+              <stop offset="100%" stopColor="#B80710" />
+            </linearGradient>
+          </defs>
+
+          {/* Left Vertical Ribbon Pillar (with concave bottom curve) */}
+          <path
+            className="pf-nf-pillar-left"
+            d="M 18 10 L 38 10 L 38 118 C 31 116.5 24 114.5 18 112 Z"
+            fill="url(#nfLeftGrad)"
+          />
+
+          {/* Right Vertical Ribbon Pillar (with concave bottom curve) */}
+          <path
+            className="pf-nf-pillar-right"
+            d="M 62 10 L 82 10 L 82 112 C 76 114.5 69 116.5 62 118 Z"
+            fill="url(#nfRightGrad)"
+          />
+
+          {/* Diagonal Ribbon Sash (slams over left pillar with 3D drop shadow) */}
+          <path
+            className="pf-nf-sash"
+            d="M 18 10 L 38 10 L 82 112 C 76 114.5 69 116.5 62 118 L 18 10 Z"
+            fill="url(#nfDiagGrad)"
+            filter="url(#nfDropShadow)"
+          />
+        </svg>
+
+        {/* Anamorphic Horizontal Cinema Lens Flare Sweep */}
+        <div className="pf-nf-anamorphic-streak">
+          <span className="pf-flare-core" />
+          <span className="pf-flare-halo" />
+        </div>
+      </div>
     </div>
   );
 }

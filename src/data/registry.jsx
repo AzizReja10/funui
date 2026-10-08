@@ -26,6 +26,8 @@ import TempCard from "../components/ui/TempCard";
 import tempCardSource from "../components/ui/TempCard.jsx?raw";
 import { PayFlowDemo } from "../components/showcase/PayFlowDemo";
 import payFlowSource from "../components/ui/PayFlow.jsx?raw";
+import Lanyard from "../components/ui/Lanyard";
+import lanyardSource from "../components/ui/Lanyard.jsx?raw";
 
 const carouselItems = [
   {
@@ -289,6 +291,36 @@ export default function UploadCardExample() {
       { name: "onSuccess", type: "(details: { amount, payee, upiId, company }) => void", default: "undefined", description: "Callback triggered once the settlement screen completes" },
       { name: "onReset", type: "() => void", default: "undefined", description: "Callback triggered when the flow is reset" },
       { name: "className", type: "string", default: "''", description: "Additional CSS classes for outer smartphone container" },
+    ],
+  },
+  {
+    slug: "lanyard",
+    name: "Lanyard",
+    category: "Featured & Hero",
+    badge: "new",
+    description: "A badge on a physics-driven band. Grab it, fling it, flip it.",
+    tags: ["Lanyard", "Physics", "Verlet", "Canvas", "Badge", "Interactive", "Holographic", "Simulation"],
+    installation: "components/ui/Lanyard.jsx",
+    dependencies: [],
+    demo: <Lanyard />,
+    code: lanyardSource,
+    props: [
+      { name: "size", type: "number (0.3 - 0.9)", default: "0.6", description: "Scale multiplier for badge and hardware dimensions" },
+      { name: "bandLength", type: "number (0.2 - 1.0)", default: "0.5", description: "Length of the flexible ribbon strap" },
+      { name: "bandWidth", type: "number (0.3 - 1.0)", default: "0.65", description: "Stroke width of the ribbon band" },
+      { name: "corner", type: "number (0 - 0.6)", default: "0.3", description: "Corner radius factor of the badge card" },
+      { name: "gravity", type: "number (0 - 2)", default: "1.0", description: "Downward gravitational acceleration force" },
+      { name: "damping", type: "number (0 - 1)", default: "0.5", description: "Velocity damping factor preventing excessive oscillations" },
+      { name: "elasticity", type: "number (0 - 1)", default: "0.5", description: "Verlet constraint relaxation elasticity" },
+      { name: "breeze", type: "number (0 - 1)", default: "0.5", description: "Ambient harmonic wind gust force" },
+      { name: "finish", type: "'glossy' | 'holographic' | 'matte'", default: "'holographic'", description: "Card surface shader effect" },
+      { name: "orientation", type: "'portrait' | 'landscape'", default: "'portrait'", description: "Card aspect ratio orientation" },
+      { name: "metal", type: "'silver' | 'gold' | 'graphite'", default: "'silver'", description: "Metallic finish for the top clip and ring" },
+      { name: "cardColor", type: "string", default: "'#ffffff'", description: "Hex color of the card base substrate" },
+      { name: "bandColor", type: "string", default: "'#111111'", description: "Hex color of the ribbon strap" },
+      { name: "plain", type: "boolean", default: "false", description: "When true, hides repeating text on the ribbon" },
+      { name: "interactive", type: "boolean", default: "true", description: "Enables pointer drag, fling, and tap-to-flip physics" },
+      { name: "intro", type: "boolean", default: "true", description: "Enables initial pendulum swing entrance animation" },
     ],
   },
   {
